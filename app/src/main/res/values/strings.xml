@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">VirtualPot</string>
+    <string name="appwidget_text">Name</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Create plant</string>
+    <string name="reset_widget">Reset plant</string>
+    <string name="last_clicked_time">Last Clicked : %1$s</string>
+    <string name="unknown_date">Unknown</string>
+    <string name="cancel">Cancel</string>
+</resources>
