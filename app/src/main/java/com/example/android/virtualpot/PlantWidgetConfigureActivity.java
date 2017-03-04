@@ -70,7 +70,6 @@ public class PlantWidgetConfigureActivity extends Activity {
     // Write the prefix to the SharedPreferences object for this widget
     static void saveStartTimePref(Context context, int appWidgetId, Date date) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        Log.d("saving to pref","Widget Id = "+appWidgetId);
         prefs.putLong(PREF_PREFIX_DATETIME + appWidgetId, date.getTime());
         prefs.apply();
     }
@@ -79,7 +78,6 @@ public class PlantWidgetConfigureActivity extends Activity {
     // If there is no preference saved, get the default from a resource
     static String loadTitlePref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        Log.d("Reading pref","Widget Id = "+appWidgetId);
         String titleValue = prefs.getString(PREF_PREFIX_NAME + appWidgetId, null);
         if (titleValue != null) {
             return titleValue;

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.util.Date;
@@ -37,20 +38,26 @@ public class PlantWidget extends AppWidgetProvider {
 
         //update image if plant is old enough
         Date createdAt = PlantWidgetConfigureActivity.loadStartTimePref(context,appWidgetId);
-        long mills = new Date().getTime() - createdAt.getTime();
-        long hours = mills/(1000 * 60 * 60);
-        if(hours>3) {
-            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.pot_3);
-            views.setImageViewBitmap(R.id.appwidget_image, icon);
-        }else if(hours>2) {
-            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.pot_2);
-            views.setImageViewBitmap(R.id.appwidget_image, icon);
-        }else if(hours>1) {
-            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.pot_1);
-            views.setImageViewBitmap(R.id.appwidget_image, icon);
+        if(createdAt!=null) {
+            long mills = new Date().getTime() - createdAt.getTime();
+            double hours = mills / (1000.0 * 60 * 60);
+            if (hours > 3) {
+                Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.pot_3);
+                views.setImageViewBitmap(R.id.appwidget_image, icon);
+            } else if (hours > 2) {
+                Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.pot_2);
+                views.setImageViewBitmap(R.id.appwidget_image, icon);
+            } else if (hours > 1) {
+                Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.pot_1);
+                views.setImageViewBitmap(R.id.appwidget_image, icon);
+            } else {
+                Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.pot_0);
+                views.setImageViewBitmap(R.id.appwidget_image, icon);
+            }
         }
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
