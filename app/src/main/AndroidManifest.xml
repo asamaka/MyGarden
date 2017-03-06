@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <receiver android:name="com.example.android.virtualpot.PlantWidget">
+        <receiver android:name=".PlantWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -18,13 +18,19 @@
                 android:resource="@xml/plant_widget_info" />
         </receiver>
 
-        <activity android:name="com.example.android.virtualpot.PlantWidgetConfigureActivity">
+        <activity android:name=".PlantWidgetConfigureActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".PlantWateringService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.util.Date;
@@ -20,48 +19,6 @@ import java.util.Date;
 public class PlantWidget extends AppWidgetProvider {
 
     private static String URI_SCHEME = "widget_uri";
-
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
-
-        CharSequence widgetText = PlantWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.plant_widget);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
-        // Set the click handler to open the configuration activity
-        Intent configIntent = new Intent(context, PlantWidgetConfigureActivity.class);
-        Uri data = Uri.parse(URI_SCHEME + "://widget/id/"+appWidgetId);
-        configIntent.setData(data);
-        configIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, configIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setOnClickPendingIntent(R.id.appwidget_image, pendingIntent);
-
-        //update image if plant is old enough
-        Date createdAt = PlantWidgetConfigureActivity.loadStartTimePref(context,appWidgetId);
-        if(createdAt!=null) {
-            long mills = new Date().getTime() - createdAt.getTime();
-            double hours = mills / (1000.0 * 60 * 60);
-            if (hours > 3) {
-                Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.pot_3);
-                views.setImageViewBitmap(R.id.appwidget_image, icon);
-            } else if (hours > 2) {
-                Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.pot_2);
-                views.setImageViewBitmap(R.id.appwidget_image, icon);
-            } else if (hours > 1) {
-                Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.pot_1);
-                views.setImageViewBitmap(R.id.appwidget_image, icon);
-            } else {
-                Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.pot_0);
-                views.setImageViewBitmap(R.id.appwidget_image, icon);
-            }
-        }
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
-    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -75,7 +32,7 @@ public class PlantWidget extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         // When the user deletes the widget, delete the preference associated with it.
         for (int appWidgetId : appWidgetIds) {
-            PlantWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
+            SharedPrefUtils.deleteAll(context, appWidgetId);
         }
     }
 
@@ -87,6 +44,48 @@ public class PlantWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+    }
+
+
+    /**
+     * Updates a specific widget instance given the corresponding widget Id
+     *
+     * @param context          The calling context
+     * @param appWidgetManager The widget manager
+     * @param appWidgetId      The Id of the widget to be updated
+     */
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                int appWidgetId) {
+
+        // Construct the RemoteViews object
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.plant_widget);
+
+        // Set the click handler to open the configuration activity
+        Intent configIntent = new Intent(context, PlantWidgetConfigureActivity.class);
+        Uri data = Uri.parse(URI_SCHEME + "://widget/id/" + appWidgetId);
+        configIntent.setData(data);
+        configIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.pot_image, configPendingIntent);
+
+        // Set the click handler to water the plant
+        Intent waterIntent = new Intent(context, PlantWateringService.class);
+        waterIntent.setAction(PlantWateringService.ACTION_WATER_PLANT);
+        waterIntent.putExtra(PlantWateringService.EXTRA_WIDGET_ID, appWidgetId);
+        PendingIntent wateringPendingIntent = PendingIntent.getService(context, 0, waterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.cloud_image, wateringPendingIntent);
+
+
+        //update image if plant is old enough
+        Date createdAt = SharedPrefUtils.loadStartTime(context, appWidgetId);
+        if (createdAt != null) {
+            long mills = new Date().getTime() - createdAt.getTime();
+            Bitmap image = BitmapFactory.decodeResource(context.getResources(),
+                    PlantUtils.getImageResourceByAge(mills));
+            views.setImageViewBitmap(R.id.pot_image, image);
+        }
+        // Instruct the widget manager to update the widget
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 }
 
