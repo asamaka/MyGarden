@@ -6,6 +6,6 @@
     android:minHeight="80dp"
     android:minWidth="40dp"
     android:previewImage="@drawable/ic_pot"
-    android:resizeMode="horizontal|vertical"
+    android:resizeMode="horizontal"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen"></appwidget-provider>

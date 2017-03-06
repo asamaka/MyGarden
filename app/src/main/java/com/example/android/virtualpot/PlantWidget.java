@@ -5,8 +5,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.widget.RemoteViews;
 
@@ -62,14 +60,14 @@ public class PlantWidget extends AppWidgetProvider {
 
         // Set the click handler to open the configuration activity
         Intent configIntent = new Intent(context, PlantWidgetConfigureActivity.class);
-        Uri data = Uri.parse(URI_SCHEME + "://widget/id/" + appWidgetId);
-        configIntent.setData(data);
+        configIntent.setData(Uri.parse(URI_SCHEME + "://widget/id/" + appWidgetId));
         configIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.pot_image, configPendingIntent);
 
         // Set the click handler to water the plant
         Intent waterIntent = new Intent(context, PlantWateringService.class);
+        waterIntent.setData(Uri.parse(URI_SCHEME + "://widget/id/" + appWidgetId));
         waterIntent.setAction(PlantWateringService.ACTION_WATER_PLANT);
         waterIntent.putExtra(PlantWateringService.EXTRA_WIDGET_ID, appWidgetId);
         PendingIntent wateringPendingIntent = PendingIntent.getService(context, 0, waterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -78,12 +76,14 @@ public class PlantWidget extends AppWidgetProvider {
 
         //update image if plant is old enough
         Date createdAt = SharedPrefUtils.loadStartTime(context, appWidgetId);
-        if (createdAt != null) {
-            long mills = new Date().getTime() - createdAt.getTime();
-            Bitmap image = BitmapFactory.decodeResource(context.getResources(),
-                    PlantUtils.getImageResourceByAge(mills));
-            views.setImageViewBitmap(R.id.pot_image, image);
+        Date wateredAt = SharedPrefUtils.loadWaterTime(context, appWidgetId);
+        if (createdAt != null && wateredAt != null) {
+            long plantAge = new Date().getTime() - createdAt.getTime();
+            long waterAge = new Date().getTime() - wateredAt.getTime();
+            views.setImageViewResource(R.id.pot_image, PlantUtils.getPlantImageRes(plantAge, waterAge));
+            views.setImageViewResource(R.id.cloud_image, PlantUtils.getCloudImageRes(waterAge));
         }
+
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }

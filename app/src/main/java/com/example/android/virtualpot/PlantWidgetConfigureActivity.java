@@ -67,6 +67,7 @@ public class PlantWidgetConfigureActivity extends Activity {
 
         // When the button is clicked, create a new plane and set the start time
         SharedPrefUtils.saveStartTime(this, mAppWidgetId, new Date());
+        SharedPrefUtils.saveWaterTime(this, mAppWidgetId, new Date());
 
         // It is the responsibility of the configuration activity to update the app widget
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
