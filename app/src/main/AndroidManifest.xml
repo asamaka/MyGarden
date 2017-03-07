@@ -18,7 +18,8 @@
                 android:resource="@xml/plant_widget_info" />
         </receiver>
 
-        <activity android:name=".PlantWidgetConfigureActivity">
+        <activity android:name=".PlantWidgetConfigureActivity"
+            android:label="@string/settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,49 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
+    <ImageView
+        android:id="@+id/shelf_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/configure" />
+        android:layout_below="@+id/plant_config_image"
+        android:layout_gravity="center"
+        android:layout_marginTop="-18dp"
+        android:src="@drawable/shelf" />
+
+    <ImageView
+        android:id="@+id/plant_config_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/pot_3" />
+
+    <TextView
+        android:id="@+id/seed_planted_text"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/shelf_image"
+        android:layout_marginTop="8dp"
+        android:text="@string/seed_planted"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/created_time_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
+        style="@style/Base.TextAppearance.AppCompat.Display1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seed_planted_text" />
+
+    <TextView
+        android:id="@+id/plant_watered_text"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/created_time_text"
+        android:layout_marginTop="8dp"
+        android:text="@string/last_watered"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/watered_time_text"
+        style="@style/Base.TextAppearance.AppCompat.Display1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/plant_watered_text" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/add_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/add_widget"
-            android:onClick="onAddButtonClicked"/>
+            android:layout_margin="8dp"
+            android:layout_weight="50"
+            android:onClick="onAddButtonClicked"
+            android:text="@string/add_widget" />
 
         <Button
             android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/cancel"
-            android:onClick="onCancelButtonClicked"/>
+            android:layout_margin="8dp"
+            android:layout_weight="50"
+            android:onClick="onCancelButtonClicked"
+            android:text="@string/cancel" />
 
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

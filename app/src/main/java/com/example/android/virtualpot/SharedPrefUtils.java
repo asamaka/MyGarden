@@ -13,38 +13,26 @@ public class SharedPrefUtils {
     private static final String PREF_PREFIX_WATERED = "watered_";
 
 
-    static void saveStartTime(Context context, int appWidgetId, Date date) {
+    static void saveStartTime(Context context, int appWidgetId, long currentTimeMills) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putLong(PREF_PREFIX_CREATED + appWidgetId, date.getTime());
+        prefs.putLong(PREF_PREFIX_CREATED + appWidgetId, currentTimeMills);
         prefs.apply();
     }
 
-    static void saveWaterTime(Context context, int appWidgetId, Date date) {
+    static void saveWaterTime(Context context, int appWidgetId, long currentTimeMills) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putLong(PREF_PREFIX_WATERED + appWidgetId, date.getTime());
+        prefs.putLong(PREF_PREFIX_WATERED + appWidgetId, currentTimeMills);
         prefs.apply();
     }
 
-    static Date loadStartTime(Context context, int appWidgetId) {
+    static long loadStartTime(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        long lastClicked = prefs.getLong(PREF_PREFIX_CREATED + appWidgetId, 0);
-        if (lastClicked != 0) {
-            return new Date(lastClicked);
-        } else {
-            return null;
-        }
+        return prefs.getLong(PREF_PREFIX_CREATED + appWidgetId, 0);
     }
 
-    static Date loadWaterTime(Context context, int appWidgetId) {
-        Log.d(SharedPrefUtils.class.getSimpleName(),"loading water time");
+    static long loadWaterTime(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        long timestamp = prefs.getLong(PREF_PREFIX_WATERED + appWidgetId, 0);
-        Log.d(SharedPrefUtils.class.getSimpleName(),"timestamp="+timestamp);
-        if (timestamp != 0) {
-            return new Date(timestamp);
-        } else {
-            return null;
-        }
+        return prefs.getLong(PREF_PREFIX_WATERED + appWidgetId, 0);
     }
 
     static void deleteAll(Context context, int appWidgetId) {

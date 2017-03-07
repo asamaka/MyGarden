@@ -1,9 +1,5 @@
 package com.example.android.virtualpot;
 
-/**
- * Created by asser on 3/6/17.
- */
-
 public class PlantUtils {
 
     private static final long NO_WATER_LIFE = 1000 * 60 * 60 * 48; // 48 hours
@@ -18,19 +14,18 @@ public class PlantUtils {
      */
     public static int getPlantImageRes(long plantAge, long waterAge) {
         //check if plant is dead first
-        if (waterAge > NO_WATER_LIFE) {
-            return R.drawable.pot_0;
-        }
+        //TODO: use dead plant images instead of just pot_0
+        boolean plantDead = waterAge > NO_WATER_LIFE;
         //plant is still alive! update image if old enough
-        long days = plantAge / (1000 * 60 * 60 * 24);
-        if (days > 5) {
-            return R.drawable.pot_3;
-        } else if (days > 2) {
-            return R.drawable.pot_2;
-        } else if (days > 1) {
-            return R.drawable.pot_1;
+        double hours = plantAge / (1000.0 * 60 * 60 );
+        if (hours > 10) {
+            return plantDead ? R.drawable.pot_0 : R.drawable.pot_3;
+        } else if (hours > 5) {
+            return plantDead ? R.drawable.pot_0 : R.drawable.pot_2;
+        } else if (hours > 1) {
+            return plantDead ? R.drawable.pot_0 : R.drawable.pot_1;
         } else {
-            return R.drawable.pot_0;
+            return plantDead ? R.drawable.pot_0 : R.drawable.pot_0;
         }
     }
 
@@ -42,14 +37,17 @@ public class PlantUtils {
      */
     public static int getCloudImageRes(long milliSeconds) {
         double minutes = milliSeconds / (1000.0 * 60);
-        int imgRes = R.drawable.cloud_0;
-        if (minutes > 90) {
-            imgRes = R.drawable.cloud_0;
+        if (minutes > 120) {
+            return R.drawable.cloud_3;
+        } else if (minutes > 90) {
+            return R.drawable.cloud_2;
         } else if (minutes > 60) {
-            imgRes = R.drawable.cloud_0;
+            return R.drawable.cloud_1;
         } else if (minutes > 30) {
-            imgRes = R.drawable.cloud_0;
+            return R.drawable.cloud_0;
+        } else {
+            //don't show any clouds
+            return android.R.color.transparent;
         }
-        return imgRes;
     }
 }

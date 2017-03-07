@@ -1,23 +1,31 @@
 package com.example.android.virtualpot;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
  * The configuration screen for the {@link PlantWidget PlantWidget} AppWidget.
  */
-public class PlantWidgetConfigureActivity extends Activity {
+public class PlantWidgetConfigureActivity extends AppCompatActivity {
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private TextView mAppWidgetCreatedText;
     private TextView mAppWidgetWateredText;
+    private TextView mAppWidgetCreatedLabel;
+    private TextView mAppWidgetWateredLabel;
+
     private Button mAppWidgetAddButton;
+    private ImageView mPlantImage;
 
     public PlantWidgetConfigureActivity() {
         super();
@@ -36,6 +44,9 @@ public class PlantWidgetConfigureActivity extends Activity {
         mAppWidgetAddButton = (Button) findViewById(R.id.add_button);
         mAppWidgetCreatedText = (TextView) findViewById(R.id.created_time_text);
         mAppWidgetWateredText = (TextView) findViewById(R.id.watered_time_text);
+        mPlantImage = (ImageView) findViewById(R.id.plant_config_image);
+        mAppWidgetCreatedLabel = (TextView) findViewById(R.id.seed_planted_text);
+        mAppWidgetWateredLabel = (TextView) findViewById(R.id.plant_watered_text);
 
         // Find the widget id from the intent.
         Intent intent = getIntent();
@@ -51,23 +62,34 @@ public class PlantWidgetConfigureActivity extends Activity {
             return;
         }
 
-        Date createdAt = SharedPrefUtils.loadStartTime(this, mAppWidgetId);
-        if (createdAt != null) {
-            mAppWidgetCreatedText.setText(createdAt.toString());
+        //get the correct plant image
+        long createdAt = SharedPrefUtils.loadStartTime(this, mAppWidgetId);
+        long wateredAt = SharedPrefUtils.loadWaterTime(this, mAppWidgetId);
+        long now = System.currentTimeMillis();
+        long plantAge = now - createdAt;
+        long waterAge = now - wateredAt;
+        if(createdAt>0) {
+            mPlantImage.setImageResource(PlantUtils.getPlantImageRes(plantAge, waterAge));
+            String aliveFor = DateUtils.getRelativeTimeSpanString(
+                    createdAt,
+                    System.currentTimeMillis(),
+                    DateUtils.MINUTE_IN_MILLIS)
+                    .toString();
+            mAppWidgetCreatedText.setText(aliveFor);
             mAppWidgetAddButton.setText(getString(R.string.reset_widget));
+            mAppWidgetCreatedLabel.setVisibility(View.VISIBLE);
         }
-
-        Date wateredAt = SharedPrefUtils.loadWaterTime(this, mAppWidgetId);
-        if (wateredAt != null) {
-            mAppWidgetWateredText.setText(wateredAt.toString());
+        if(wateredAt>0) {
+            mAppWidgetWateredText.setText(DateUtils.getRelativeTimeSpanString(wateredAt));
+            mAppWidgetWateredLabel.setVisibility(View.VISIBLE);
         }
     }
 
     public void onAddButtonClicked(View view) {
 
         // When the button is clicked, create a new plane and set the start time
-        SharedPrefUtils.saveStartTime(this, mAppWidgetId, new Date());
-        SharedPrefUtils.saveWaterTime(this, mAppWidgetId, new Date());
+        SharedPrefUtils.saveStartTime(this, mAppWidgetId, System.currentTimeMillis());
+        SharedPrefUtils.saveWaterTime(this, mAppWidgetId, System.currentTimeMillis());
 
         // It is the responsibility of the configuration activity to update the app widget
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
@@ -81,6 +103,9 @@ public class PlantWidgetConfigureActivity extends Activity {
     }
 
     public void onCancelButtonClicked(View view) {
+        // It is the responsibility of the configuration activity to update the app widget
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        PlantWidget.updateAppWidget(this, appWidgetManager, mAppWidgetId);
         setResult(RESULT_CANCELED);
         finish();
     }

@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
 
-import java.util.Date;
-
 /**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in {@link PlantWidgetConfigureActivity PlantWidgetConfigureActivity}
@@ -73,16 +71,14 @@ public class PlantWidget extends AppWidgetProvider {
         PendingIntent wateringPendingIntent = PendingIntent.getService(context, 0, waterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.cloud_image, wateringPendingIntent);
 
-
         //update image if plant is old enough
-        Date createdAt = SharedPrefUtils.loadStartTime(context, appWidgetId);
-        Date wateredAt = SharedPrefUtils.loadWaterTime(context, appWidgetId);
-        if (createdAt != null && wateredAt != null) {
-            long plantAge = new Date().getTime() - createdAt.getTime();
-            long waterAge = new Date().getTime() - wateredAt.getTime();
-            views.setImageViewResource(R.id.pot_image, PlantUtils.getPlantImageRes(plantAge, waterAge));
-            views.setImageViewResource(R.id.cloud_image, PlantUtils.getCloudImageRes(waterAge));
-        }
+        long createdAt = SharedPrefUtils.loadStartTime(context, appWidgetId);
+        long wateredAt = SharedPrefUtils.loadWaterTime(context, appWidgetId);
+        long now = System.currentTimeMillis();
+        long plantAge = now - createdAt;
+        long waterAge = now - wateredAt;
+        views.setImageViewResource(R.id.pot_image, PlantUtils.getPlantImageRes(plantAge, waterAge));
+        views.setImageViewResource(R.id.cloud_image, PlantUtils.getCloudImageRes(waterAge));
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

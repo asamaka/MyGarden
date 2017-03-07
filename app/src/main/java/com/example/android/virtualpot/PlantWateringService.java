@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import java.util.Date;
-
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -38,14 +36,14 @@ public class PlantWateringService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(this.getClass().getSimpleName(),"onHandleIntent");
+        Log.d(this.getClass().getSimpleName(), "onHandleIntent");
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_WATER_PLANT.equals(action)) {
-                Log.d(this.getClass().getSimpleName(),"action correct");
+                Log.d(this.getClass().getSimpleName(), "action correct");
                 final int widgetId = intent.getIntExtra(EXTRA_WIDGET_ID,
                         AppWidgetManager.INVALID_APPWIDGET_ID);
-                Log.d(this.getClass().getSimpleName(),"widgetId="+widgetId);
+                Log.d(this.getClass().getSimpleName(), "widgetId=" + widgetId);
                 handleActionWaterPlant(widgetId);
             }
         }
@@ -56,7 +54,10 @@ public class PlantWateringService extends IntentService {
      * parameters.
      */
     private void handleActionWaterPlant(int widgetId) {
-        Log.d(this.getClass().getSimpleName(),"saving water time");
-        SharedPrefUtils.saveWaterTime(this, widgetId, new Date());
+        Log.d(this.getClass().getSimpleName(), "saving water time");
+        SharedPrefUtils.saveWaterTime(this, widgetId, System.currentTimeMillis());
+        // It is the responsibility of the configuration activity to update the app widget
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        PlantWidget.updateAppWidget(this, appWidgetManager, widgetId);
     }
 }
