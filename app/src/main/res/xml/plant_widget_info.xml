@@ -5,7 +5,7 @@
     android:initialLayout="@layout/plant_widget"
     android:minHeight="80dp"
     android:minWidth="40dp"
-    android:previewImage="@drawable/ic_pot"
+    android:previewImage="@drawable/launcher_icon"
     android:resizeMode="horizontal"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen"></appwidget-provider>

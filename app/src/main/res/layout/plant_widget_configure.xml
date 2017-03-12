@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/pot_3" />
+        android:src="@drawable/vine_3" />
 
     <TextView
         android:id="@+id/seed_planted_text"
@@ -69,7 +69,7 @@
             android:layout_margin="8dp"
             android:layout_weight="50"
             android:onClick="onAddButtonClicked"
-            android:text="@string/add_widget" />
+            android:text="@string/add_plant" />
 
         <Button
             android:id="@+id/cancel_button"

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.android.virtualpot.PlantDetail"
+    tools:showIn="@layout/activity_plant_detail">
+
+    <LinearLayout
+        android:id="@+id/plant_and_water"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_marginRight="12dp"
+            android:id="@+id/plant_detail_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/empty_pot" />
+
+        <ImageView
+            android:layout_marginLeft="12dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/water_meter"
+            android:layout_gravity="bottom" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_margin="20dp"
+        android:layout_below="@+id/plant_and_water"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+        <include layout="@layout/plant_age" />
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

@@ -69,7 +69,7 @@ public class PlantWidgetConfigureActivity extends AppCompatActivity {
         long plantAge = now - createdAt;
         long waterAge = now - wateredAt;
         if(createdAt>0) {
-            mPlantImage.setImageResource(PlantUtils.getPlantImageRes(plantAge, waterAge));
+            mPlantImage.setImageResource(PlantUtils.getPlantImageRes(this,plantAge, waterAge,0));
             String aliveFor = DateUtils.getRelativeTimeSpanString(
                     createdAt,
                     System.currentTimeMillis(),

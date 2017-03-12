@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Typed array resources are used to created a list of static data
+in this case, we can list the types of plants here using string resources to allow translation
+each item is indexed in the array based on its order starting from 0 -->
+
+
+<!-- To access this array in the code
+Resources res = getResources();
+TypedArray plantTypes = res.obtainTypedArray(R.array.plant_types);
+String type = plantTypes.getString(0); // this will return "Vine"
+-->
+
+<resources>
+    <array name="plant_types">
+        <item>vine</item>
+        <item>cactus</item>
+    </array>
+</resources>

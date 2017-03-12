@@ -61,7 +61,7 @@ public class PlantWidget extends AppWidgetProvider {
         configIntent.setData(Uri.parse(URI_SCHEME + "://widget/id/" + appWidgetId));
         configIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setOnClickPendingIntent(R.id.pot_image, configPendingIntent);
+        views.setOnClickPendingIntent(R.id.plant_image, configPendingIntent);
 
         // Set the click handler to water the plant
         Intent waterIntent = new Intent(context, PlantWateringService.class);
@@ -77,7 +77,7 @@ public class PlantWidget extends AppWidgetProvider {
         long now = System.currentTimeMillis();
         long plantAge = now - createdAt;
         long waterAge = now - wateredAt;
-        views.setImageViewResource(R.id.pot_image, PlantUtils.getPlantImageRes(plantAge, waterAge));
+        views.setImageViewResource(R.id.plant_image, PlantUtils.getPlantImageRes(context,plantAge, waterAge,0));
         views.setImageViewResource(R.id.cloud_image, PlantUtils.getCloudImageRes(waterAge));
 
         // Instruct the widget manager to update the widget

@@ -2,7 +2,7 @@
     <string name="app_name">VirtualPot</string>
     <string name="appwidget_text">Name</string>
     <string name="configure">Configure</string>
-    <string name="add_widget">Create plant</string>
+    <string name="add_plant">Add plant</string>
     <string name="reset_widget">Reset plant</string>
     <string name="last_clicked_time">Last Clicked : %1$s</string>
     <string name="unknown_date">Unknown</string>
@@ -10,4 +10,10 @@
     <string name="settings">Settings</string>
     <string name="seed_planted">Seed Planted:</string>
     <string name="last_watered">Last Watered:</string>
+    <string name="my_garden">My Garden</string>
+    <string name="vine">Vine</string>
+    <string name="cactus">Cactus</string>
+    <string name="jade">Jade</string>
+    <string name="title_activity_plant_detail">PlantDetail</string>
+    <string name="days">days</string>
 </resources>
