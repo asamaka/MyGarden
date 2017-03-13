@@ -41,10 +41,10 @@ public class PlantWidget extends AppWidgetProvider {
      * @param appWidgetManager  The widget manager
      * @param imgRes            The image resource for the plant ImageView
      * @param plantId           The database ID for that plant
-     * @param widgetId          The Id of the widget to be updated
+     * @param widgetIds          The Id of the widget to be updated
      */
-    public static void updatePlantWidget(Context context, AppWidgetManager appWidgetManager,
-                                         int imgRes, long plantId, int widgetId) {
+    public static void updatePlantWidgets(Context context, AppWidgetManager appWidgetManager,
+                                         int imgRes, long plantId, int[] widgetIds) {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.plant_widget);
 
@@ -58,18 +58,17 @@ public class PlantWidget extends AppWidgetProvider {
         // with pending intents for click events anyway, so it makes sense to set the plant ID as an extra
         Intent waterIntent = new Intent(context, PlantWateringService.class);
         waterIntent.setAction(PlantWateringService.ACTION_WATER_PLANT);
+        Log.d(PlantWidget.class.getSimpleName(),"plantId = "+plantId);
         waterIntent.putExtra(PlantWateringService.EXTRA_PLANT_ID, plantId);
+        waterIntent.putExtra(PlantWateringService.EXTRA_WIDGET_ID, widgetIds);
         PendingIntent wateringPendingIntent = PendingIntent.getService(context, 0, waterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.water_button, wateringPendingIntent);
-
-        Log.d(PlantWidget.class.getSimpleName(),"img res = "+imgRes);
-
         //update image
         views.setImageViewResource(R.id.plant_image, imgRes);
-
-        Log.d(PlantWidget.class.getSimpleName(),"widgetId = "+widgetId);
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(widgetId, views);
+        // Instruct the widget manager to update the widgets
+        for (int widgetId : widgetIds) {
+            appWidgetManager.updateAppWidget(widgetId, views);
+        }
     }
 }
 
