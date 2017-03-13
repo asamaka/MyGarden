@@ -9,9 +9,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -24,36 +24,33 @@ public class MainActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private PlantListAdapter mAdapter;
-    private RecyclerView mRecyclerView;
+    private PlantTypesAdapter mTypesAdapter;
+    private RecyclerView mGardenRecyclerView;
+    private RecyclerView mTypesRecyclerView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mRecyclerView = (RecyclerView) findViewById(R.id.plants_list_recycler_view);
-        mRecyclerView.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        mGardenRecyclerView = (RecyclerView) findViewById(R.id.plants_list_recycler_view);
+        mTypesRecyclerView =  (RecyclerView) findViewById(R.id.plant_types_recycler_view);
+        mGardenRecyclerView.setLayoutManager(
+                new GridLayoutManager(this, 4)
+        );
+        mTypesRecyclerView.setLayoutManager(
+                new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
         );
         mAdapter = new PlantListAdapter(this, null);
-        mRecyclerView.setAdapter(mAdapter);
+        mTypesAdapter = new PlantTypesAdapter(this);
+        mGardenRecyclerView.setAdapter(mAdapter);
+        mTypesRecyclerView.setAdapter(mTypesAdapter);
         getSupportLoaderManager().initLoader(1, null, this);
     }
 
 
     public void onAddButtonClicked(View view) {
-        // When the button is clicked, create a new plant and set the start time
-        //TODO: handle multiple  plant types
-        int plantType = 1;
-        long timeNow = System.currentTimeMillis();
 
-        // Insert the new plant into DB
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(PlantEntry.COLUMN_PLANT_TYPE, plantType);
-        contentValues.put(PlantEntry.COLUMN_CREATION_TIME, timeNow);
-        contentValues.put(PlantEntry.COLUMN_LAST_WATERED_TIME, timeNow);
-        contentValues.put(PlantEntry.COLUMN_IS_DEAD, false);
-        getContentResolver().insert(PlantEntry.CONTENT_URI, contentValues);
     }
 
     @Override
@@ -76,10 +73,27 @@ public class MainActivity
     }
 
     public void onPlantClick(View view) {
-        ImageView imgView = (ImageView)view.findViewById(R.id.plant_list_item_image);
+        ImageView imgView = (ImageView) view.findViewById(R.id.plant_list_item_image);
         long plantId = (long) imgView.getTag();
         Intent intent = new Intent(getBaseContext(), PlantDetail.class);
         intent.putExtra("EXTRA_PLANT_ID", plantId);
         startActivity(intent);
+    }
+
+    public void onAddButtonClick(View view) {
+        // When the button is clicked, create a new plant and set the start time
+        //get the plant type from the tag
+        ImageView imgView = (ImageView) view.findViewById(R.id.plant_type_image);
+        int plantType = (int) imgView.getTag();
+
+        long timeNow = System.currentTimeMillis();
+
+        // Insert the new plant into DB
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PlantEntry.COLUMN_PLANT_TYPE, plantType);
+        contentValues.put(PlantEntry.COLUMN_CREATION_TIME, timeNow);
+        contentValues.put(PlantEntry.COLUMN_LAST_WATERED_TIME, timeNow);
+        contentValues.put(PlantEntry.COLUMN_IS_DEAD, false);
+        getContentResolver().insert(PlantEntry.CONTENT_URI, contentValues);
     }
 }

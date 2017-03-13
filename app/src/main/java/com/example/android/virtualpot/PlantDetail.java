@@ -22,7 +22,6 @@ import static com.example.android.virtualpot.provider.PlantContract.PATH_PLANTS;
 public class PlantDetail extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String PLANT_ID_KEY = "plant_id";
     long mPlantId;
 
     @Override
@@ -70,12 +69,17 @@ public class PlantDetail extends AppCompatActivity
         long wateredAt = cursor.getLong(waterTimeIndex);
         long timeNow = System.currentTimeMillis();
 
-        double days = (timeNow - createdAt) / (1000.0 * 60 * 60 * 24);
-        int imgRes = PlantUtils.getPlantImageRes(this, timeNow - createdAt, timeNow - wateredAt, plantType);
+        int plantImgRes = PlantUtils.getPlantImageRes(this, timeNow - createdAt, timeNow - wateredAt, plantType);
+        int waterImgRes = PlantUtils.getWaterImageRes(timeNow - wateredAt);
 
-        ((ImageView) findViewById(R.id.plant_detail_image)).setImageResource(imgRes);
-        ((TextView) findViewById(R.id.plant_age_number)).setText(String.valueOf((int) days));
-        ((TextView) findViewById(R.id.plant_age_unit)).setText(getString(R.string.days));
+        ((ImageView) findViewById(R.id.plant_detail_image)).setImageResource(plantImgRes);
+        ((ImageView) findViewById(R.id.water_detail_image)).setImageResource(waterImgRes);
+        ((TextView) findViewById(R.id.plant_age_number)).setText(
+                String.valueOf(PlantUtils.getDisplayAgeInt(timeNow - createdAt))
+        );
+        ((TextView) findViewById(R.id.plant_age_unit)).setText(
+                PlantUtils.getDisplayAgeUnit(this, timeNow - createdAt)
+        );
     }
 
     @Override

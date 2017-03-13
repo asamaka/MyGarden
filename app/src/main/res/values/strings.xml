@@ -15,5 +15,8 @@
     <string name="cactus">Cactus</string>
     <string name="jade">Jade</string>
     <string name="title_activity_plant_detail">PlantDetail</string>
+    <string name="title_activity_my_garden">My Garden</string>
     <string name="days">days</string>
+    <string name="hours">hours</string>
+    <string name="minutes">minutes</string>
 </resources>

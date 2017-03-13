@@ -4,11 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.android.virtualpot.PlantDetail"
     tools:showIn="@layout/activity_plant_detail">
 
+    <ImageView
+        android:id="@+id/shelf_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/plant_and_water"
+        android:layout_gravity="center"
+        android:layout_marginTop="-16dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:src="@drawable/shelf" />
+
     <LinearLayout
+
         android:id="@+id/plant_and_water"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,17 +37,20 @@
             android:src="@drawable/empty_pot" />
 
         <ImageView
+            android:id="@+id/water_detail_image"
             android:layout_marginLeft="12dp"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:src="@drawable/water_meter"
+            android:src="@drawable/water_empty"
             android:layout_gravity="bottom" />
 
     </LinearLayout>
 
+
+
     <RelativeLayout
-        android:layout_margin="20dp"
-        android:layout_below="@+id/plant_and_water"
+        android:layout_marginTop="-32dp"
+        android:layout_below="@+id/shelf_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

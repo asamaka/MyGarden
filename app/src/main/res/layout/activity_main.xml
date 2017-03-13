@@ -10,51 +10,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.android.virtualpot.MainActivity">
 
-    <ImageView
-        android:id="@+id/shelf_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/plant_config_image"
-        android:layout_gravity="center"
-        android:layout_marginTop="-18dp"
-        android:src="@drawable/shelf" />
-
-    <ImageView
-        android:id="@+id/plant_config_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/vine_3" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/shelf_image"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/add_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:onClick="onAddButtonClicked"
-            android:text="@string/add_plant" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/my_garden_text"
-        style="@style/Base.TextAppearance.AppCompat.Headline"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/plants_list_recycler_view"
-        android:text="@string/my_garden" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/plants_list_recycler_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/add_new_plant_text"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_below="@+id/plants_list_recycler_view"
+        android:text="Add New Plant"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/add_new_plant_text"
+        android:id="@+id/plant_types_recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>
 
