@@ -6,11 +6,11 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
  * Implementation of App Widget functionality.
- * App Widget Configuration implemented in {@link PlantWidgetConfigureActivity PlantWidgetConfigureActivity}
  */
 public class PlantWidget extends AppWidgetProvider {
 
@@ -18,70 +18,58 @@ public class PlantWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
-        }
+        //Start the intent service update action, the service takes care of updating the widgets UI
+        PlantWateringService.startActionUpdatePlant(context, appWidgetIds);
     }
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        // When the user deletes the widget, delete the preference associated with it.
-        for (int appWidgetId : appWidgetIds) {
-            SharedPrefUtils.deleteAll(context, appWidgetId);
-        }
+
     }
 
     @Override
     public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
     }
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
     }
-
 
     /**
      * Updates a specific widget instance given the corresponding widget Id
-     *
-     * @param context          The calling context
-     * @param appWidgetManager The widget manager
-     * @param appWidgetId      The Id of the widget to be updated
+     * @param context           The calling context
+     * @param appWidgetManager  The widget manager
+     * @param imgRes            The image resource for the plant ImageView
+     * @param plantId           The database ID for that plant
+     * @param widgetId          The Id of the widget to be updated
      */
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
-
+    public static void updatePlantWidget(Context context, AppWidgetManager appWidgetManager,
+                                         int imgRes, long plantId, int widgetId) {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.plant_widget);
 
-        // Set the click handler to open the configuration activity
-        Intent configIntent = new Intent(context, PlantWidgetConfigureActivity.class);
-        configIntent.setData(Uri.parse(URI_SCHEME + "://widget/id/" + appWidgetId));
-        configIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setOnClickPendingIntent(R.id.plant_image, configPendingIntent);
+        // Set the click handler to open the main activity
+        Intent appIntent = new Intent(context, MainActivity.class);
+        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.plant_image, appPendingIntent);
 
         // Set the click handler to water the plant
+        // Usually you would set the button image tag to the plant ID but since widgets can only deal
+        // with pending intents for click events anyway, so it makes sense to set the plant ID as an extra
         Intent waterIntent = new Intent(context, PlantWateringService.class);
-        waterIntent.setData(Uri.parse(URI_SCHEME + "://widget/id/" + appWidgetId));
         waterIntent.setAction(PlantWateringService.ACTION_WATER_PLANT);
-        waterIntent.putExtra(PlantWateringService.EXTRA_WIDGET_ID, appWidgetId);
+        waterIntent.putExtra(PlantWateringService.EXTRA_PLANT_ID, plantId);
         PendingIntent wateringPendingIntent = PendingIntent.getService(context, 0, waterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setOnClickPendingIntent(R.id.cloud_image, wateringPendingIntent);
+        views.setOnClickPendingIntent(R.id.water_button, wateringPendingIntent);
 
-        //update image if plant is old enough
-        long createdAt = SharedPrefUtils.loadStartTime(context, appWidgetId);
-        long wateredAt = SharedPrefUtils.loadWaterTime(context, appWidgetId);
-        long now = System.currentTimeMillis();
-        long plantAge = now - createdAt;
-        long waterAge = now - wateredAt;
-        views.setImageViewResource(R.id.plant_image, PlantUtils.getPlantImageRes(context,plantAge, waterAge,0));
-        views.setImageViewResource(R.id.cloud_image, PlantUtils.getCloudImageRes(waterAge));
+        Log.d(PlantWidget.class.getSimpleName(),"img res = "+imgRes);
 
+        //update image
+        views.setImageViewResource(R.id.plant_image, imgRes);
+
+        Log.d(PlantWidget.class.getSimpleName(),"widgetId = "+widgetId);
         // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        appWidgetManager.updateAppWidget(widgetId, views);
     }
 }
 

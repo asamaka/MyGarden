@@ -19,6 +19,7 @@ public class PlantUtils {
     public static int getPlantImageRes(Context context, long plantAge, long waterAge, int type) {
         //check if plant is dead first
         //TODO: use dead plant images instead of just empty_pot
+        //TODO: use dying plant images instead of (or alongside with) water meter
         boolean plantDead = waterAge > NO_WATER_LIFE;
         //plant is still alive! update image if old enough
         double hours = plantAge / (1000.0 * 60 * 60 );
@@ -61,28 +62,6 @@ public class PlantUtils {
             return R.drawable.water_4;
         } else {
             return R.drawable.water_full;
-        }
-    }
-
-    /**
-     * Returns the corresponding image resource of the cloud given the time since it was last watered
-     *
-     * @param milliSeconds Time since last watered milliseconds
-     * @return Integer value of the image resource
-     */
-    public static int getCloudImageRes(long milliSeconds) {
-        double minutes = milliSeconds / (1000.0 * 60);
-        if (minutes > 120) {
-            return R.drawable.cloud_3;
-        } else if (minutes > 90) {
-            return R.drawable.cloud_2;
-        } else if (minutes > 60) {
-            return R.drawable.cloud_1;
-        } else if (minutes > 30) {
-            return R.drawable.cloud_0;
-        } else {
-            //don't show any clouds
-            return android.R.color.transparent;
         }
     }
 

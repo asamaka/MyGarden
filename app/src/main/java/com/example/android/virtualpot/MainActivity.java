@@ -55,8 +55,8 @@ public class MainActivity
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-        Uri CONTACT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
-        return new CursorLoader(this, CONTACT_URI, null,
+        Uri PLANT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
+        return new CursorLoader(this, PLANT_URI, null,
                 null, null, null);
     }
 

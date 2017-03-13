@@ -39,20 +39,20 @@ public class PlantDetail extends AppCompatActivity
     }
 
     public void onWaterButtonClick(View view) {
-        Uri SINGLE_URI = ContentUris.withAppendedId(
+        Uri SINGLE_PLANT_URI = ContentUris.withAppendedId(
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build(), mPlantId);
         ContentValues contentValues = new ContentValues();
         long timeNow = System.currentTimeMillis();
         // Update the watered timestamp
         contentValues.put(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME, timeNow);
-        getContentResolver().update(SINGLE_URI, contentValues, null, null);
+        getContentResolver().update(SINGLE_PLANT_URI, contentValues, null, null);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri SINGLE_URI = ContentUris.withAppendedId(
+        Uri SINGLE_PLANT_URI = ContentUris.withAppendedId(
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build(), mPlantId);
-        return new CursorLoader(this, SINGLE_URI, null,
+        return new CursorLoader(this, SINGLE_PLANT_URI, null,
                 null, null, null);
     }
 
@@ -88,9 +88,9 @@ public class PlantDetail extends AppCompatActivity
     }
 
     public void onCutButtonClick(View view) {
-        Uri SINGLE_URI = ContentUris.withAppendedId(
+        Uri SINGLE_PLANT_URI = ContentUris.withAppendedId(
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build(), mPlantId);
-        getContentResolver().delete(SINGLE_URI, null, null);
+        getContentResolver().delete(SINGLE_PLANT_URI, null, null);
         finish();
     }
 }
