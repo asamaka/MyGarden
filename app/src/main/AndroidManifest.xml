@@ -38,6 +38,10 @@
             android:name=".PlantDetail"
             android:label="@string/title_activity_plant_detail"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <service android:name="StackWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
     </application>
 
 </manifest>

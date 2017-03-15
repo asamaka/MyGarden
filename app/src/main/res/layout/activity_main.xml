@@ -13,13 +13,15 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/plants_list_recycler_view"
         android:layout_width="wrap_content"
-        android:layout_height="400dp">
+        android:layout_height="320dp">
 
     </android.support.v7.widget.RecyclerView>
 
     <TextView
+        android:layout_centerHorizontal="true"
         android:id="@+id/add_new_plant_text"
-        android:layout_marginTop="20dp"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:layout_margin="12dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/plants_list_recycler_view"
@@ -27,6 +29,7 @@
 
 
     <android.support.v7.widget.RecyclerView
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/add_new_plant_text"
         android:id="@+id/plant_types_recycler_view"
         android:layout_width="wrap_content"

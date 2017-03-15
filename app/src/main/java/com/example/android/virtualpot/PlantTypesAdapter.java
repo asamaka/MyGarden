@@ -59,7 +59,10 @@ public class PlantTypesAdapter extends RecyclerView.Adapter<PlantTypesAdapter.Pl
 
     @Override
     public void onBindViewHolder(PlantViewHolder holder, int position) {
-        int imgRes = PlantUtils.getPlantImgResName(mContext,position,3);
+        int imgRes = PlantUtils.getPlantImgResName(
+                mContext,position,
+                PlantUtils.PlantStatus.ALIVE,
+                PlantUtils.PlantSize.FULLY_GROWN);
         holder.plantImageView.setImageResource(imgRes);
         holder.plantImageView.setTag(position);
     }

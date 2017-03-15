@@ -39,13 +39,7 @@ public class PlantDetail extends AppCompatActivity
     }
 
     public void onWaterButtonClick(View view) {
-        Uri SINGLE_PLANT_URI = ContentUris.withAppendedId(
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build(), mPlantId);
-        ContentValues contentValues = new ContentValues();
-        long timeNow = System.currentTimeMillis();
-        // Update the watered timestamp
-        contentValues.put(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME, timeNow);
-        getContentResolver().update(SINGLE_PLANT_URI, contentValues, null, null);
+        PlantWateringService.startActionWaterPlant(this,mPlantId);
     }
 
     @Override

@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="50dp"
-    android:layout_height="100dp"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:layout_height="200dp"
     android:onClick="onAddButtonClick">
 
     <ImageView
         android:id="@+id/plant_type_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="75dp"
+        android:layout_height="150dp"
         android:layout_below="@+id/plants_list_recycler_view"
         android:layout_centerHorizontal="true"
         android:src="@drawable/empty_pot" />
 
     <android.support.design.widget.FloatingActionButton
+        android:layout_below="@+id/plant_type_image"
         app:fabSize="mini"
         android:id="@+id/reset_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/add" />
 
 </RelativeLayout>

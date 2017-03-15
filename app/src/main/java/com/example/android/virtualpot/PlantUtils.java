@@ -6,7 +6,10 @@ import android.content.res.TypedArray;
 
 public class PlantUtils {
 
-    private static final long NO_WATER_LIFE = 1000 * 60 * 60 * 48; // 48 hours
+    public static final long MAX_AGE_WITHOUT_WATER = 1000 * 60 * 60 * 48; // 48 hours
+    public static final long DANGER_AGE_WITHOUT_WATER = 1000 * 60 * 60 * 24; // 24 hours
+    enum PlantStatus {ALIVE, DYING, DEAD};
+    enum PlantSize {TINY, JUVENILE, FULLY_GROWN};
 
     /**
      * Returns the corresponding image resource of the plant given the plant's age and
@@ -18,28 +21,34 @@ public class PlantUtils {
      */
     public static int getPlantImageRes(Context context, long plantAge, long waterAge, int type) {
         //check if plant is dead first
-        //TODO: use dead plant images instead of just empty_pot
-        //TODO: use dying plant images instead of (or alongside with) water meter
-        boolean plantDead = waterAge > NO_WATER_LIFE;
+        PlantStatus status = PlantStatus.ALIVE;
+        if(waterAge > MAX_AGE_WITHOUT_WATER) status = PlantStatus.DEAD;
+        else if(waterAge > DANGER_AGE_WITHOUT_WATER) status = PlantStatus.DYING;
+
+
         //plant is still alive! update image if old enough
         double hours = plantAge / (1000.0 * 60 * 60 );
         if (hours > 10) {
-            return plantDead ? R.drawable.empty_pot : getPlantImgResName(context,type,3);
+            return getPlantImgResName(context,type,status,PlantSize.FULLY_GROWN);
         } else if (hours > 5) {
-            return plantDead ? R.drawable.empty_pot : getPlantImgResName(context,type,2);
+            return getPlantImgResName(context,type,status,PlantSize.JUVENILE);
         } else if (hours > 1) {
-            return plantDead ? R.drawable.empty_pot : getPlantImgResName(context,type,1);
+            return getPlantImgResName(context,type,status,PlantSize.TINY);
         } else {
-            return plantDead ? R.drawable.empty_pot : R.drawable.empty_pot;
+            return R.drawable.empty_pot;
         }
     }
 
-    public static int getPlantImgResName(Context context, int type, int level){
+    public static int getPlantImgResName(Context context, int type, PlantStatus status, PlantSize size){
         Resources res = context.getResources();
         TypedArray plantTypes = res.obtainTypedArray(R.array.plant_types);
-        String typeName = plantTypes.getString(type);
-        return context.getResources().
-                getIdentifier(typeName+"_"+level, "drawable", context.getPackageName());
+        String resName = plantTypes.getString(type);
+        if(status == PlantStatus.DYING) resName += "_d";
+        else if(status == PlantStatus.DEAD) resName += "_dead";
+        if(size==PlantSize.TINY) resName += "_1";
+        else if(size==PlantSize.JUVENILE) resName += "_2";
+        else if(size==PlantSize.FULLY_GROWN) resName += "_3";
+        return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
     }
 
     /**

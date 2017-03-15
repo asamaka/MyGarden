@@ -2,6 +2,7 @@ package com.example.android.virtualpot;
 
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -25,7 +26,7 @@ public class PlantWateringService extends IntentService {
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     public static final String ACTION_WATER_PLANT = "com.example.android.virtualpot.action.WATER_PLANT";
     public static final String ACTION_UPDATE_PLANT = "com.example.android.virtualpot.action.UPDATE_PLANT";
-    public static final String EXTRA_WIDGET_ID = "com.example.android.virtualpot.extra.WIDGET_ID";
+    public static final String ACTION_SET_PLANT_DEAD = "com.example.android.virtualpot.action.SET_PLANT_DEAD";
     public static final String EXTRA_PLANT_ID = "com.example.android.virtualpot.extra.PLANT_ID";
 
     public PlantWateringService() {
@@ -38,11 +39,10 @@ public class PlantWateringService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startActionWaterPlant(Context context, int plantId, int[] widgetIds) {
+    public static void startActionWaterPlant(Context context, long plantId) {
         Intent intent = new Intent(context, PlantWateringService.class);
         intent.setAction(ACTION_WATER_PLANT);
         intent.putExtra(EXTRA_PLANT_ID, plantId);
-        intent.putExtra(EXTRA_WIDGET_ID, widgetIds);
         context.startService(intent);
     }
 
@@ -52,13 +52,23 @@ public class PlantWateringService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startActionUpdatePlant(Context context, int[] widgetIds) {
+    public static void startActionUpdatePlant(Context context) {
         Intent intent = new Intent(context, PlantWateringService.class);
         intent.setAction(ACTION_UPDATE_PLANT);
-        intent.putExtra(EXTRA_WIDGET_ID, widgetIds);
         context.startService(intent);
     }
 
+    public static void startActionSetPlantDead (Context context, long plantId) {
+        Intent intent = new Intent(context, PlantWateringService.class);
+        intent.setAction(ACTION_SET_PLANT_DEAD);
+        intent.putExtra(EXTRA_PLANT_ID, plantId);
+        context.startService(intent);
+    }
+
+    /**
+     *
+     * @param intent
+     */
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
@@ -66,35 +76,59 @@ public class PlantWateringService extends IntentService {
             if (ACTION_WATER_PLANT.equals(action)) {
                 final long plantId = intent.getLongExtra(EXTRA_PLANT_ID,
                         PlantContract.INVALID_PLANT_ID);
-                Log.d(PlantWateringService.class.getSimpleName(),"plantId="+plantId);
-                final int[] widgetIds = intent.getIntArrayExtra(EXTRA_WIDGET_ID);
-                Log.d(PlantWateringService.class.getSimpleName(),"widgetIds="+widgetIds);
-                handleActionWaterPlant(plantId, widgetIds);
+                handleActionWaterPlant(plantId);
             }
             else if (ACTION_UPDATE_PLANT.equals(action)) {
-                final int[] widgetIds = intent.getIntArrayExtra(EXTRA_WIDGET_ID);
-                handleActionGetPlantImgRes(widgetIds);
+                handleActionGetPlantImgRes();
+            }
+            else if(ACTION_SET_PLANT_DEAD.equals(action)){
+                final long plantId = intent.getLongExtra(EXTRA_PLANT_ID,
+                        PlantContract.INVALID_PLANT_ID);
+                handleActionSetPlantDead(plantId);
             }
         }
     }
 
     /**
-     * Handle action Foo in the provided background thread with the provided
+     * Handle action WaterPlant in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionWaterPlant(long plantId, int[] widgetIds) {
+    private void handleActionWaterPlant(long plantId) {
+        //check if already dead then can't water
         Uri SINGLE_PLANT_URI = ContentUris.withAppendedId(
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build(), plantId);
+        Cursor cursor = getContentResolver().query(SINGLE_PLANT_URI,null,null,null,null);
+        if(cursor == null || cursor.getCount()<1) return; //can't find this plant!
+        cursor.moveToFirst();
+        if(cursor.getInt(cursor.getColumnIndex(PlantContract.PlantEntry.COLUMN_IS_DEAD))!=0)
+            return; // plant already dead
+
         ContentValues contentValues = new ContentValues();
         long timeNow = System.currentTimeMillis();
         // Update the watered timestamp
         contentValues.put(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME, timeNow);
         getContentResolver().update(SINGLE_PLANT_URI, contentValues, null, null);
-        handleActionGetPlantImgRes(widgetIds);
+        handleActionGetPlantImgRes();
+    }
+
+    /**
+     * Handle action SetPlantDead in the provided background thread with the provided
+     * parameters.
+     */
+    private void handleActionSetPlantDead(long plantId) {
+        //TODO: need to call this in the right update time when plants die
+        Uri SINGLE_PLANT_URI = ContentUris.withAppendedId(
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build(), plantId);
+        ContentValues contentValues = new ContentValues();
+        // Update the "is_dead" col
+        contentValues.put(PlantContract.PlantEntry.COLUMN_IS_DEAD, true);
+        getContentResolver().update(SINGLE_PLANT_URI, contentValues, null, null);
+        handleActionGetPlantImgRes();
     }
 
 
-    private void handleActionGetPlantImgRes(int[] widgetIds) {
+    private void handleActionGetPlantImgRes() {
+        //TODO: do i need to keep doing this on each update?
         Uri PLANT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
         Cursor cursor = getContentResolver().query(
                 PLANT_URI,
@@ -114,11 +148,15 @@ public class PlantWateringService extends IntentService {
         int plantType = cursor.getInt(plantTypeIndex);
         long createdAt = cursor.getLong(createTimeIndex);
         long wateredAt = cursor.getLong(waterTimeIndex);
+        cursor.close();
+
         long timeNow = System.currentTimeMillis();
 
         int imgRes = PlantUtils.getPlantImageRes(this,timeNow-createdAt, timeNow-wateredAt,plantType);
+        boolean inDanger = ((timeNow-wateredAt) > PlantUtils.DANGER_AGE_WITHOUT_WATER);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        Log.d(PlantWateringService.class.getSimpleName(),"plantId = "+plantId);
-        PlantWidget.updatePlantWidgets(this, appWidgetManager, imgRes, plantId, widgetIds);
+        int[] widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,PlantWidget.class));
+        PlantWidget.updatePlantWidgets(this, appWidgetManager, imgRes, plantId, inDanger, widgetIds);
+
     }
 }
