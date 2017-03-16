@@ -49,7 +49,7 @@ public class PlantWateringService extends IntentService {
     }
 
     /**
-     * Starts this service to perform action with the given parameters. If
+     * Starts this service to perform WaterPlant action with the given parameters. If
      * the service is already performing a task this action will be queued.
      *
      * @see IntentService
@@ -62,7 +62,7 @@ public class PlantWateringService extends IntentService {
     }
 
     /**
-     * Starts this service to perform action with the given parameters. If
+     * Starts this service to perform UpdatePlantWidgets action with the given parameters. If
      * the service is already performing a task this action will be queued.
      *
      * @see IntentService
@@ -113,6 +113,9 @@ public class PlantWateringService extends IntentService {
         handleActionUpdatePlantWidgets();
     }
 
+    /**
+     * Handle action UpdatePlantWidgets in the provided background thread
+     */
     private void handleActionUpdatePlantWidgets() {
         //Query to get the plant that's most in need for water (last watered)
         Uri PLANT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
@@ -123,12 +126,11 @@ public class PlantWateringService extends IntentService {
                 null,
                 PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME
         );
+        // Extract the top plant information (the one that needs watering the most)
         long plantId = INVALID_PLANT_ID;
-        int plantType = 0;
-        long createdAt = System.currentTimeMillis();
         long wateredAt = System.currentTimeMillis();
         long timeNow = System.currentTimeMillis();
-        int imgRes = PlantUtils.getEmptyImgeRes();
+        int imgRes = PlantUtils.getEmptyImgRes();
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             int idIndex = cursor.getColumnIndex(PlantContract.PlantEntry._ID);
@@ -137,9 +139,9 @@ public class PlantWateringService extends IntentService {
             int plantTypeIndex = cursor.getColumnIndex(PlantContract.PlantEntry.COLUMN_PLANT_TYPE);
 
             plantId = cursor.getLong(idIndex);
-            plantType = cursor.getInt(plantTypeIndex);
-            createdAt = cursor.getLong(createTimeIndex);
             wateredAt = cursor.getLong(waterTimeIndex);
+            int plantType = cursor.getInt(plantTypeIndex);
+            long createdAt = cursor.getLong(createTimeIndex);
             cursor.close();
             imgRes = PlantUtils.getPlantImageRes(this, timeNow - createdAt, timeNow - wateredAt, plantType);
         }
@@ -151,6 +153,5 @@ public class PlantWateringService extends IntentService {
         //Now update all widgets
         boolean needWater = ((timeNow - wateredAt) > PlantUtils.MIN_AGE_BETWEEN_WATER);
         PlantWidget.updatePlantWidgets(this, appWidgetManager, imgRes, plantId, needWater, widgetIds);
-
     }
 }

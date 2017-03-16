@@ -56,6 +56,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     //called on start and when notifyAppWidgetViewDataChanged is called
     @Override
     public void onDataSetChanged() {
+        // Get all plant info ordered by creation time
         Uri PLANT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
         if (mCursor != null) mCursor.close();
         mCursor = mContext.getContentResolver().query(
@@ -78,8 +79,15 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         return mCursor.getCount();
     }
 
+    /**
+     * This method acts like the onBindViewHolder method in an Adapter
+     *
+     * @param position The current position of the item in the StackView to be displayed
+     * @return The RemoteViews object to display for the provided postion
+     */
     @Override
     public RemoteViews getViewAt(int position) {
+        if (mCursor == null || mCursor.getCount() == 0) return null;
         mCursor.moveToPosition(position);
         int idIndex = mCursor.getColumnIndex(PlantContract.PlantEntry._ID);
         int createTimeIndex = mCursor.getColumnIndex(PlantContract.PlantEntry.COLUMN_CREATION_TIME);
@@ -94,11 +102,13 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.plant_widget);
 
-        //update image
+        // Update the plant image
         int imgRes = PlantUtils.getPlantImageRes(mContext, timeNow - createdAt, timeNow - wateredAt, plantType);
         views.setImageViewResource(R.id.plant_image, imgRes);
+        // Always hide the water drop in StackView mode
         views.setViewVisibility(R.id.water_button, View.GONE);
 
+        // Fill in the onClick PendingIntent Template using the specific plant Id for each item individually
         Bundle extras = new Bundle();
         extras.putLong(PlantWateringService.EXTRA_PLANT_ID, plantId);
         Intent fillInIntent = new Intent();
@@ -116,7 +126,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getViewTypeCount() {
-        return 1;
+        return 1; // Treat all items in the StackView the same
     }
 
     @Override

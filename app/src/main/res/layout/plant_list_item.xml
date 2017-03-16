@@ -22,7 +22,6 @@
     android:id="@+id/plant_list_item_image"
     android:layout_width="75dp"
     android:layout_height="150dp"
-    android:layout_gravity="center"
     android:layout_margin="12dp"
     android:onClick="onPlantClick"
     tools:src="@drawable/empty_pot" />

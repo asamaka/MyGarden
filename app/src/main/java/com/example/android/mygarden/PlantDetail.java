@@ -36,6 +36,7 @@ import static com.example.android.mygarden.provider.PlantContract.PATH_PLANTS;
 public class PlantDetail extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final int SINGLE_LOADER_ID = 200;
     long mPlantId;
 
     @Override
@@ -43,7 +44,8 @@ public class PlantDetail extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_detail);
         mPlantId = getIntent().getLongExtra("EXTRA_PLANT_ID", 0);
-        getSupportLoaderManager().initLoader(1, null, this);
+        // This activity displays single plant information that is loaded using a cursor loader
+        getSupportLoaderManager().initLoader(SINGLE_LOADER_ID, null, this);
     }
 
     public void onBackButtonClick(View view) {

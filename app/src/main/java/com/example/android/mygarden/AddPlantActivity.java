@@ -35,9 +35,9 @@ public class AddPlantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_plant);
 
+        // Plant types are displayed as a recycler view using PlantTypesAdapter
         mTypesAdapter = new PlantTypesAdapter(this);
         mTypesRecyclerView = (RecyclerView) findViewById(R.id.plant_types_recycler_view);
-
         mTypesRecyclerView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         );
@@ -45,23 +45,27 @@ public class AddPlantActivity extends AppCompatActivity {
 
     }
 
-    public void onAddButtonClick(View view) {
-        // When the button is clicked, create a new plant and set the start time
-        //get the plant type from the tag
+    /**
+     * Event handler to handle clicking on a plant type
+     *
+     * @param view
+     */
+    public void onPlantTypeClick(View view) {
+        // When the chosen plant type is clicked, create a new plant and set the creation time and
+        // water time to now
+        // Extract the plant type from the tag
         ImageView imgView = (ImageView) view.findViewById(R.id.plant_type_image);
         int plantType = (int) imgView.getTag();
-
         long timeNow = System.currentTimeMillis();
-
         // Insert the new plant into DB
         ContentValues contentValues = new ContentValues();
         contentValues.put(PlantContract.PlantEntry.COLUMN_PLANT_TYPE, plantType);
         contentValues.put(PlantContract.PlantEntry.COLUMN_CREATION_TIME, timeNow);
         contentValues.put(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME, timeNow);
         getContentResolver().insert(PlantContract.PlantEntry.CONTENT_URI, contentValues);
-
+        // Update the widgets to display the new plant (if any)
         PlantWateringService.startActionUpdatePlantWidgets(this);
-
+        // Close this activity
         finish();
     }
 

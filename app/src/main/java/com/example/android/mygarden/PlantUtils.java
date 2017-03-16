@@ -23,15 +23,15 @@ import android.content.res.TypedArray;
 public class PlantUtils {
 
     private static final long MINUTE_MILLISECONDS = 1000 * 60;
-    private static final long HOUR_MILLISECONDS = MINUTE_MILLISECONDS;//* 60;
+    private static final long HOUR_MILLISECONDS = MINUTE_MILLISECONDS * 60;
     private static final long DAY_MILLISECONDS = HOUR_MILLISECONDS * 24;
 
-    public static final long MIN_AGE_BETWEEN_WATER = HOUR_MILLISECONDS * 2; // 2 hours
-    public static final long DANGER_AGE_WITHOUT_WATER = HOUR_MILLISECONDS * 6; // 6 hours
-    public static final long MAX_AGE_WITHOUT_WATER = HOUR_MILLISECONDS * 12; // 12 hours
-    public static final long TINY_AGE = DAY_MILLISECONDS * 0; // 0 days
-    public static final long JUVENILE_AGE = DAY_MILLISECONDS * 1; // 1 days
-    public static final long FULLY_GROWN_AGE = DAY_MILLISECONDS * 2; // 2 days
+    static final long MIN_AGE_BETWEEN_WATER = HOUR_MILLISECONDS * 2; // can water every 2 hours
+    static final long DANGER_AGE_WITHOUT_WATER = HOUR_MILLISECONDS * 6; // in danger after 6 hours
+    static final long MAX_AGE_WITHOUT_WATER = HOUR_MILLISECONDS * 12; // plants die after 12 hours
+    static final long TINY_AGE = DAY_MILLISECONDS * 0; // plants start tiny
+    static final long JUVENILE_AGE = DAY_MILLISECONDS * 1; // 1 day old
+    static final long FULLY_GROWN_AGE = DAY_MILLISECONDS * 2; // 2 days old
 
 
     enum PlantStatus {ALIVE, DYING, DEAD}
@@ -44,7 +44,7 @@ public class PlantUtils {
 
     /**
      * Returns the corresponding image resource of the plant given the plant's age and
-     * when it was last watered
+     * time since it was last watered
      *
      * @param plantAge Time (in milliseconds) the plant has been alive
      * @param waterAge Time (in milliseconds) since it was last watered
@@ -68,7 +68,17 @@ public class PlantUtils {
         }
     }
 
-    public static int getPlantImgRes(Context context, int type, PlantStatus status, PlantSize size) {
+    /**
+     * Returns the corresponding image resource of the plant given the plant's type, status and
+     * size (age category)
+     *
+     * @param context The context
+     * @param type    The plant type (starts from 0 and corresponds to the index to the item in arrays.xml)
+     * @param status  The PlantStatus
+     * @param size    The PlantSize
+     * @return Image Resource to the correct plant image
+     */
+    static int getPlantImgRes(Context context, int type, PlantStatus status, PlantSize size) {
         Resources res = context.getResources();
         TypedArray plantTypes = res.obtainTypedArray(R.array.plant_types);
         String resName = plantTypes.getString(type);
@@ -80,23 +90,42 @@ public class PlantUtils {
         return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
     }
 
-    public static String getPlantTypeName(Context context, int type) {
+    /**
+     * Returns the plant type display name based on the type index from the string resources
+     *
+     * @param context The context
+     * @param type    The plant type (starts from 0 and corresponds to the index to the item in arrays.xml)
+     * @return The plant type display name
+     */
+    static String getPlantTypeName(Context context, int type) {
         Resources res = context.getResources();
         TypedArray plantTypes = res.obtainTypedArray(R.array.plant_types);
-        return plantTypes.getString(type);
+        String resName = plantTypes.getString(type);
+        int resId = context.getResources().getIdentifier(resName, "string", context.getPackageName());
+        try {
+            return context.getResources().getString(resId);
+        } catch (Resources.NotFoundException ex) {
+            return context.getResources().getString(R.string.unkown_type);
+        }
     }
 
-    public static int getEmptyImgeRes() {
+    /**
+     * Returns the image resource representing an empty widget
+     *
+     * @return Image resource for empty widget
+     */
+    static int getEmptyImgRes() {
         return R.drawable.grass;
     }
 
     /**
-     * Returns the corresponding image resource of the water meter given the last time the plant was watered
+     * Returns the corresponding image resource of the water meter given the time since the plant
+     * was last watered
      *
      * @param waterAge Time (in milliseconds) since it was last watered
-     * @return Image Resource to the correct plant image
+     * @return Image Resource to the correct water meter image
      */
-    public static int getWaterImageRes(long waterAge) {
+    static int getWaterImageRes(long waterAge) {
         //plant is still alive! update image if old enough
         int hours = (int) (waterAge / HOUR_MILLISECONDS);
         if (hours > 10) {
@@ -114,7 +143,13 @@ public class PlantUtils {
         }
     }
 
-    public static int getDisplayAgeInt(long milliSeconds) {
+    /**
+     * Converts the age in milli seconds to a displayable format (days, hours or minutes)
+     *
+     * @param milliSeconds The age in milli seconds
+     * @return The value of either days, hours or minutes
+     */
+    static int getDisplayAgeInt(long milliSeconds) {
         int days = (int) (milliSeconds / DAY_MILLISECONDS);
         if (days >= 1) return days;
         int hours = (int) (milliSeconds / HOUR_MILLISECONDS);
@@ -122,7 +157,14 @@ public class PlantUtils {
         return (int) (milliSeconds / MINUTE_MILLISECONDS);
     }
 
-    public static String getDisplayAgeUnit(Context context, long milliSeconds) {
+    /**
+     * Converts the age in milli seconds to a displayable format (days, hours or minutes)
+     *
+     * @param context The context
+     * @param milliSeconds The age in milli seconds
+     * @return The unit of either days, hours or minutes
+     */
+    static String getDisplayAgeUnit(Context context, long milliSeconds) {
         int days = (int) (milliSeconds / DAY_MILLISECONDS);
         if (days >= 1) return context.getString(R.string.days);
         int hours = (int) (milliSeconds / HOUR_MILLISECONDS);
