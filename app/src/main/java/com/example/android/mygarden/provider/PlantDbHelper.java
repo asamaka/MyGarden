@@ -1,4 +1,4 @@
-package com.example.android.virtualpot.provider;
+package com.example.android.mygarden.provider;
 
 /*
 * Copyright (C) 2017 The Android Open Source Project
@@ -20,7 +20,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.android.virtualpot.provider.PlantContract.PlantEntry;
+import com.example.android.mygarden.provider.PlantContract.PlantEntry;
 
 public class PlantDbHelper extends SQLiteOpenHelper {
 

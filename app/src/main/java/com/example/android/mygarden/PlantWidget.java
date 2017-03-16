@@ -1,4 +1,20 @@
-package com.example.android.virtualpot;
+package com.example.android.mygarden;
+
+/*
+* Copyright (C) 2017 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*  	http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
@@ -36,7 +52,7 @@ public class PlantWidget extends AppWidgetProvider {
     public void onDisabled(Context context) {
     }
 
-    private static RemoteViews getSinglePlantRemoteView(Context context, int imgRes, long plantId, boolean showWater){
+    private static RemoteViews getSinglePlantRemoteView(Context context, int imgRes, long plantId, boolean showWater) {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.plant_widget);
 
@@ -56,12 +72,12 @@ public class PlantWidget extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.water_button, wateringPendingIntent);
         //update image
         views.setImageViewResource(R.id.plant_image, imgRes);
-        if(showWater) views.setViewVisibility(R.id.water_button, View.VISIBLE);
+        if (showWater) views.setViewVisibility(R.id.water_button, View.VISIBLE);
         else views.setViewVisibility(R.id.water_button, View.INVISIBLE);
         return views;
     }
 
-    private static RemoteViews getGardenStackRemoteView(Context context){
+    private static RemoteViews getGardenStackRemoteView(Context context) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.garden_stack_view);
         // set the StackWidgetService intent to act as the adapter for the stack view
         Intent intent = new Intent(context, StackWidgetService.class);
@@ -96,10 +112,9 @@ public class PlantWidget extends AppWidgetProvider {
             int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
 
             RemoteViews rv;
-            if(width < 70 ) {
+            if (width < 70) {
                 rv = getSinglePlantRemoteView(context, imgRes, plantId, showWater);
-            }
-            else {
+            } else {
                 rv = getGardenStackRemoteView(context);
                 //refresh data in case new plants added/removed or watered
                 //appWidgetManager.notifyAppWidgetViewDataChanged(widgetId,R.id.stack_view);
@@ -118,7 +133,6 @@ public class PlantWidget extends AppWidgetProvider {
         PlantWateringService.startActionUpdatePlantWidgets(context);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
-
 
 
 }

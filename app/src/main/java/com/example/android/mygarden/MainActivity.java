@@ -1,6 +1,21 @@
-package com.example.android.virtualpot;
+package com.example.android.mygarden;
 
-import android.content.ContentValues;
+/*
+* Copyright (C) 2017 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*  	http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,15 +25,13 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import static com.example.android.virtualpot.provider.PlantContract.BASE_CONTENT_URI;
-import static com.example.android.virtualpot.provider.PlantContract.INVALID_PLANT_ID;
-import static com.example.android.virtualpot.provider.PlantContract.PATH_PLANTS;
-import static com.example.android.virtualpot.provider.PlantContract.PlantEntry;
+import static com.example.android.mygarden.provider.PlantContract.BASE_CONTENT_URI;
+import static com.example.android.mygarden.provider.PlantContract.PATH_PLANTS;
+import static com.example.android.mygarden.provider.PlantContract.PlantEntry;
 
 public class MainActivity
         extends AppCompatActivity
@@ -36,7 +49,7 @@ public class MainActivity
         setContentView(R.layout.activity_main);
         mGardenRecyclerView = (RecyclerView) findViewById(R.id.plants_list_recycler_view);
         mGardenRecyclerView.setLayoutManager(
-                new GridLayoutManager(this, 4)
+                new GridLayoutManager(this, 5)
         );
         mAdapter = new PlantListAdapter(this, null);
         mGardenRecyclerView.setAdapter(mAdapter);

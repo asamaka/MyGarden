@@ -1,4 +1,20 @@
-package com.example.android.virtualpot;
+package com.example.android.mygarden;
+
+/*
+* Copyright (C) 2017 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*  	http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
@@ -10,11 +26,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.example.android.virtualpot.provider.PlantContract;
+import com.example.android.mygarden.provider.PlantContract;
 
-import static com.example.android.virtualpot.provider.PlantContract.BASE_CONTENT_URI;
-import static com.example.android.virtualpot.provider.PlantContract.INVALID_PLANT_ID;
-import static com.example.android.virtualpot.provider.PlantContract.PATH_PLANTS;
+import static com.example.android.mygarden.provider.PlantContract.BASE_CONTENT_URI;
+import static com.example.android.mygarden.provider.PlantContract.INVALID_PLANT_ID;
+import static com.example.android.mygarden.provider.PlantContract.PATH_PLANTS;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -24,9 +40,9 @@ import static com.example.android.virtualpot.provider.PlantContract.PATH_PLANTS;
  */
 public class PlantWateringService extends IntentService {
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    public static final String ACTION_WATER_PLANT = "com.example.android.virtualpot.action.water_plant";
-    public static final String ACTION_UPDATE_PLANT_WIDGETS = "com.example.android.virtualpot.action.update_plant_widgets";
-    public static final String EXTRA_PLANT_ID = "com.example.android.virtualpot.extra.PLANT_ID";
+    public static final String ACTION_WATER_PLANT = "com.example.android.mygarden.action.water_plant";
+    public static final String ACTION_UPDATE_PLANT_WIDGETS = "com.example.android.mygarden.action.update_plant_widgets";
+    public static final String EXTRA_PLANT_ID = "com.example.android.mygarden.extra.PLANT_ID";
 
     public PlantWateringService() {
         super("PlantWateringService");
@@ -58,7 +74,6 @@ public class PlantWateringService extends IntentService {
     }
 
     /**
-     *
      * @param intent
      */
     @Override
@@ -69,8 +84,7 @@ public class PlantWateringService extends IntentService {
                 final long plantId = intent.getLongExtra(EXTRA_PLANT_ID,
                         PlantContract.INVALID_PLANT_ID);
                 handleActionWaterPlant(plantId);
-            }
-            else if (ACTION_UPDATE_PLANT_WIDGETS.equals(action)) {
+            } else if (ACTION_UPDATE_PLANT_WIDGETS.equals(action)) {
                 handleActionUpdatePlantWidgets();
             }
         }
@@ -84,12 +98,12 @@ public class PlantWateringService extends IntentService {
         //check if already dead then can't water
         Uri SINGLE_PLANT_URI = ContentUris.withAppendedId(
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build(), plantId);
-        Cursor cursor = getContentResolver().query(SINGLE_PLANT_URI,null,null,null,null);
-        if(cursor == null || cursor.getCount()<1) return; //can't find this plant!
+        Cursor cursor = getContentResolver().query(SINGLE_PLANT_URI, null, null, null, null);
+        if (cursor == null || cursor.getCount() < 1) return; //can't find this plant!
         cursor.moveToFirst();
         long lastWatered = cursor.getLong(cursor.getColumnIndex(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME));
         long timeNow = System.currentTimeMillis();
-        if((timeNow-lastWatered)>PlantUtils.MAX_AGE_WITHOUT_WATER)
+        if ((timeNow - lastWatered) > PlantUtils.MAX_AGE_WITHOUT_WATER)
             return; // plant already dead
 
         ContentValues contentValues = new ContentValues();
@@ -115,7 +129,7 @@ public class PlantWateringService extends IntentService {
         long wateredAt = System.currentTimeMillis();
         long timeNow = System.currentTimeMillis();
         int imgRes = PlantUtils.getEmptyImgeRes();
-        if(cursor != null && cursor.getCount()>0) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             int idIndex = cursor.getColumnIndex(PlantContract.PlantEntry._ID);
             int createTimeIndex = cursor.getColumnIndex(PlantContract.PlantEntry.COLUMN_CREATION_TIME);
@@ -127,15 +141,15 @@ public class PlantWateringService extends IntentService {
             createdAt = cursor.getLong(createTimeIndex);
             wateredAt = cursor.getLong(waterTimeIndex);
             cursor.close();
-            imgRes = PlantUtils.getPlantImageRes(this,timeNow-createdAt, timeNow-wateredAt,plantType);
+            imgRes = PlantUtils.getPlantImageRes(this, timeNow - createdAt, timeNow - wateredAt, plantType);
         }
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        int[] widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,PlantWidget.class));
+        int[] widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, PlantWidget.class));
         //Trigger data update to handle the stackview widgets and force a data refresh
-        appWidgetManager.notifyAppWidgetViewDataChanged(widgetIds,R.id.stack_view);
+        appWidgetManager.notifyAppWidgetViewDataChanged(widgetIds, R.id.stack_view);
         //Now update all widgets
-        boolean needWater = ((timeNow-wateredAt) > PlantUtils.MIN_AGE_BETWEEN_WATER);
+        boolean needWater = ((timeNow - wateredAt) > PlantUtils.MIN_AGE_BETWEEN_WATER);
         PlantWidget.updatePlantWidgets(this, appWidgetManager, imgRes, plantId, needWater, widgetIds);
 
     }

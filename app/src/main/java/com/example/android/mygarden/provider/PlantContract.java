@@ -1,4 +1,4 @@
-package com.example.android.virtualpot.provider;
+package com.example.android.mygarden.provider;
 
 /*
 * Copyright (C) 2017 The Android Open Source Project
@@ -22,7 +22,7 @@ import android.provider.BaseColumns;
 public class PlantContract {
 
     // The authority, which is how your code knows which Content Provider to access
-    public static final String AUTHORITY = "com.example.android.virtualpot";
+    public static final String AUTHORITY = "com.example.android.mygarden";
 
     // The base content URI = "content://" + <authority>
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);

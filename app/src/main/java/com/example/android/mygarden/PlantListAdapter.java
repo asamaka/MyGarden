@@ -1,4 +1,4 @@
-package com.example.android.virtualpot;
+package com.example.android.mygarden;
 
 /*
 * Copyright (C) 2017 The Android Open Source Project
@@ -17,29 +17,28 @@ package com.example.android.virtualpot;
 */
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-public class PlantTypesAdapter extends RecyclerView.Adapter<PlantTypesAdapter.PlantViewHolder> {
+import com.example.android.mygarden.provider.PlantContract.PlantEntry;
 
-    Context mContext;
-    TypedArray mPlantTypes;
+public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.PlantViewHolder> {
+
+    private Context mContext;
+    private Cursor mCursor;
 
     /**
      * Constructor using the context and the db cursor
      *
      * @param context the calling context/activity
      */
-    public PlantTypesAdapter(Context context) {
-        mContext = context;
-        Resources res = mContext.getResources();
-        mPlantTypes = res.obtainTypedArray(R.array.plant_types);
+    public PlantListAdapter(Context context, Cursor cursor) {
+        this.mContext = context;
+        this.mCursor = cursor;
     }
 
     /**
@@ -53,19 +52,40 @@ public class PlantTypesAdapter extends RecyclerView.Adapter<PlantTypesAdapter.Pl
     public PlantViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Get the RecyclerView item layout
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.plant_types_list_item, parent, false);
+        View view = inflater.inflate(R.layout.plant_list_item, parent, false);
         return new PlantViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(PlantViewHolder holder, int position) {
-        int imgRes = PlantUtils.getPlantImgRes(
-                mContext,position,
-                PlantUtils.PlantStatus.ALIVE,
-                PlantUtils.PlantSize.FULLY_GROWN);
+
+        mCursor.moveToPosition(position);
+        int idIndex = mCursor.getColumnIndex(PlantEntry._ID);
+        int createTimeIndex = mCursor.getColumnIndex(PlantEntry.COLUMN_CREATION_TIME);
+        int waterTimeIndex = mCursor.getColumnIndex(PlantEntry.COLUMN_LAST_WATERED_TIME);
+        int plantTypeIndex = mCursor.getColumnIndex(PlantEntry.COLUMN_PLANT_TYPE);
+
+        long plantId = mCursor.getLong(idIndex);
+        int plantType = mCursor.getInt(plantTypeIndex);
+        long createdAt = mCursor.getLong(createTimeIndex);
+        long wateredAt = mCursor.getLong(waterTimeIndex);
+        long timeNow = System.currentTimeMillis();
+
+        int imgRes = PlantUtils.getPlantImageRes(mContext, timeNow - createdAt, timeNow - wateredAt, plantType);
+
         holder.plantImageView.setImageResource(imgRes);
-        holder.plantTypeText.setText(PlantUtils.getPlantTypeName(mContext,position));
-        holder.plantImageView.setTag(position);
+        holder.plantImageView.setTag(plantId);
+    }
+
+    public void swapCursor(Cursor newCursor) {
+        if (mCursor != null) {
+            mCursor.close();
+        }
+        mCursor = newCursor;
+        if (mCursor != null) {
+            // Force the RecyclerView to refresh
+            this.notifyDataSetChanged();
+        }
     }
 
     /**
@@ -75,8 +95,8 @@ public class PlantTypesAdapter extends RecyclerView.Adapter<PlantTypesAdapter.Pl
      */
     @Override
     public int getItemCount() {
-        if (mPlantTypes == null) return 0;
-        return mPlantTypes.length();
+        if (mCursor == null) return 0;
+        return mCursor.getCount();
     }
 
     /**
@@ -85,12 +105,10 @@ public class PlantTypesAdapter extends RecyclerView.Adapter<PlantTypesAdapter.Pl
     class PlantViewHolder extends RecyclerView.ViewHolder {
 
         ImageView plantImageView;
-        TextView plantTypeText;
 
         public PlantViewHolder(View itemView) {
             super(itemView);
-            plantImageView = (ImageView) itemView.findViewById(R.id.plant_type_image);
-            plantTypeText = (TextView) itemView.findViewById(R.id.plant_type_text);
+            plantImageView = (ImageView) itemView.findViewById(R.id.plant_list_item_image);
         }
 
     }

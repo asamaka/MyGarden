@@ -1,4 +1,4 @@
-package com.example.android.virtualpot.provider;
+package com.example.android.mygarden.provider;
 
 /*
 * Copyright (C) 2017 The Android Open Source Project
@@ -26,7 +26,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import static com.example.android.virtualpot.provider.PlantContract.PlantEntry;
+import static com.example.android.mygarden.provider.PlantContract.PlantEntry;
 
 
 public class PlantContentProvider extends ContentProvider {

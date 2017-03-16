@@ -1,25 +1,13 @@
 <resources>
-    <string name="app_name">VirtualPot</string>
-    <string name="appwidget_text">Name</string>
-    <string name="configure">Configure</string>
-    <string name="add_plant">Add plant</string>
-    <string name="reset_widget">Reset plant</string>
-    <string name="last_clicked_time">Last Clicked : %1$s</string>
-    <string name="unknown_date">Unknown</string>
-    <string name="cancel">Cancel</string>
-    <string name="settings">Settings</string>
-    <string name="seed_planted">Seed Planted:</string>
-    <string name="last_watered">Last Watered:</string>
-    <string name="my_garden">My Garden</string>
+    <string name="app_name">MyGarden</string>
     <string name="vine">Vine</string>
     <string name="cactus">Cactus</string>
-    <string name="jade">Jade</string>
     <string name="title_activity_plant_detail">PlantDetail</string>
     <string name="title_activity_my_garden">My Garden</string>
     <string name="days">days</string>
     <string name="hours">hours</string>
     <string name="minutes">minutes</string>
-    <string name="empty_view_text">No plants yet!</string>
+    <string name="empty_view_text">Garden is empty!</string>
     <string name="title_activity_add_plant">Add Plant</string>
     <string name="select_plant_type">Select a plant type</string>
 </resources>

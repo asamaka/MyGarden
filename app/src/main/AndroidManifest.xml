@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.virtualpot">
+    package="com.example.android.mygarden">
 
     <application
         android:allowBackup="true"
@@ -20,29 +20,28 @@
 
         <provider
             android:name=".provider.PlantContentProvider"
-            android:authorities="com.example.android.virtualpot"
+            android:authorities="com.example.android.mygarden"
             android:exported="true" />
 
         <service android:name=".PlantWateringService" />
+        <service
+            android:name=".StackWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_my_garden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".PlantDetail"
             android:label="@string/title_activity_plant_detail" />
-
-        <service
-            android:name=".StackWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-
-        <activity android:name=".AddPlantActivity" android:label="@string/title_activity_add_plant"></activity>
+        <activity
+            android:name=".AddPlantActivity"
+            android:label="@string/title_activity_add_plant" />
     </application>
 
 </manifest>

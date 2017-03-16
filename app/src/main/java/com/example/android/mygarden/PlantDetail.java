@@ -1,4 +1,20 @@
-package com.example.android.virtualpot;
+package com.example.android.mygarden;
+
+/*
+* Copyright (C) 2017 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*  	http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 import android.content.ContentUris;
 import android.database.Cursor;
@@ -8,15 +24,14 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.virtualpot.provider.PlantContract;
+import com.example.android.mygarden.provider.PlantContract;
 
-import static com.example.android.virtualpot.provider.PlantContract.BASE_CONTENT_URI;
-import static com.example.android.virtualpot.provider.PlantContract.PATH_PLANTS;
+import static com.example.android.mygarden.provider.PlantContract.BASE_CONTENT_URI;
+import static com.example.android.mygarden.provider.PlantContract.PATH_PLANTS;
 
 public class PlantDetail extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -36,7 +51,7 @@ public class PlantDetail extends AppCompatActivity
     }
 
     public void onWaterButtonClick(View view) {
-        PlantWateringService.startActionWaterPlant(this,mPlantId);
+        PlantWateringService.startActionWaterPlant(this, mPlantId);
     }
 
     @Override

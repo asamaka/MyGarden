@@ -1,19 +1,34 @@
-package com.example.android.virtualpot;
+package com.example.android.mygarden;
+
+/*
+* Copyright (C) 2017 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*  	http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.example.android.virtualpot.provider.PlantContract;
+import com.example.android.mygarden.provider.PlantContract;
 
-import static com.example.android.virtualpot.provider.PlantContract.BASE_CONTENT_URI;
-import static com.example.android.virtualpot.provider.PlantContract.PATH_PLANTS;
+import static com.example.android.mygarden.provider.PlantContract.BASE_CONTENT_URI;
+import static com.example.android.mygarden.provider.PlantContract.PATH_PLANTS;
 
 
 public class StackWidgetService extends RemoteViewsService {
@@ -42,7 +57,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onDataSetChanged() {
         Uri PLANT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
-        if(mCursor!=null) mCursor.close();
+        if (mCursor != null) mCursor.close();
         mCursor = mContext.getContentResolver().query(
                 PLANT_URI,
                 null,
