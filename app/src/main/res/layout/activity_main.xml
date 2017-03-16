@@ -29,9 +29,7 @@
         android:id="@+id/plants_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp">
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_margin="8dp" />
 
 
     <android.support.design.widget.FloatingActionButton
@@ -41,11 +39,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/plant_type_image"
         android:layout_margin="@dimen/fab_margin"
         android:onClick="onAddFabClick"
         android:src="@drawable/add_white"
         app:fabSize="auto" />
-
 
 </RelativeLayout>

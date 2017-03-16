@@ -40,7 +40,6 @@
             android:id="@+id/plant_types_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:paddingTop="8dp">
 
         </android.support.v7.widget.RecyclerView>
@@ -56,10 +55,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:onClick="onBackButtonClick"
         android:src="@drawable/back"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        app:fabSize="normal" />
 
 </RelativeLayout>
