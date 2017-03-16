@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class PlantTypesAdapter extends RecyclerView.Adapter<PlantTypesAdapter.PlantViewHolder> {
 
@@ -63,6 +64,7 @@ public class PlantTypesAdapter extends RecyclerView.Adapter<PlantTypesAdapter.Pl
                 PlantUtils.PlantStatus.ALIVE,
                 PlantUtils.PlantSize.FULLY_GROWN);
         holder.plantImageView.setImageResource(imgRes);
+        holder.plantTypeText.setText(PlantUtils.getPlantTypeName(mContext,position));
         holder.plantImageView.setTag(position);
     }
 
@@ -83,10 +85,12 @@ public class PlantTypesAdapter extends RecyclerView.Adapter<PlantTypesAdapter.Pl
     class PlantViewHolder extends RecyclerView.ViewHolder {
 
         ImageView plantImageView;
+        TextView plantTypeText;
 
         public PlantViewHolder(View itemView) {
             super(itemView);
             plantImageView = (ImageView) itemView.findViewById(R.id.plant_type_image);
+            plantTypeText = (TextView) itemView.findViewById(R.id.plant_type_text);
         }
 
     }

@@ -38,7 +38,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     }
 
-    //called when notifyAppWidgetViewDataChanged is called
+    //called on start and when notifyAppWidgetViewDataChanged is called
     @Override
     public void onDataSetChanged() {
         Uri PLANT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
@@ -48,7 +48,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                 null,
                 null,
                 null,
-                PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME
+                PlantContract.PlantEntry.COLUMN_CREATION_TIME
         );
     }
 

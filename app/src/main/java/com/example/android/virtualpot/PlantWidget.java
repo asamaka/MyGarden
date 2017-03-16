@@ -57,7 +57,7 @@ public class PlantWidget extends AppWidgetProvider {
         //update image
         views.setImageViewResource(R.id.plant_image, imgRes);
         if(showWater) views.setViewVisibility(R.id.water_button, View.VISIBLE);
-        else views.setViewVisibility(R.id.water_button, View.GONE);
+        else views.setViewVisibility(R.id.water_button, View.INVISIBLE);
         return views;
     }
 

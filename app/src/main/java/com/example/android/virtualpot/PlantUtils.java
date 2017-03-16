@@ -3,6 +3,7 @@ package com.example.android.virtualpot;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.util.Log;
 
 public class PlantUtils {
 
@@ -58,6 +59,11 @@ public class PlantUtils {
         return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
     }
 
+    public static String getPlantTypeName(Context context, int type) {
+        Resources res = context.getResources();
+        TypedArray plantTypes = res.obtainTypedArray(R.array.plant_types);
+        return plantTypes.getString(type);
+    }
     public static int getEmptyImgeRes() {
         return R.drawable.grass;
     }

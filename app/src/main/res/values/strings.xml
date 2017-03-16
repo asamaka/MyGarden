@@ -20,4 +20,6 @@
     <string name="hours">hours</string>
     <string name="minutes">minutes</string>
     <string name="empty_view_text">No plants yet!</string>
+    <string name="title_activity_add_plant">Add Plant</string>
+    <string name="select_plant_type">Select a plant type</string>
 </resources>

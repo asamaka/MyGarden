@@ -21,25 +21,28 @@
         <provider
             android:name=".provider.PlantContentProvider"
             android:authorities="com.example.android.virtualpot"
-            android:exported="true"/>
+            android:exported="true" />
 
-        <service
-            android:name=".PlantWateringService" />
+        <service android:name=".PlantWateringService" />
 
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:label="@string/title_activity_my_garden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".PlantDetail"
-            android:label="@string/title_activity_plant_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_plant_detail" />
 
-        <service android:name="StackWidgetService"
+        <service
+            android:name=".StackWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name=".AddPlantActivity" android:label="@string/title_activity_add_plant"></activity>
     </application>
 
 </manifest>

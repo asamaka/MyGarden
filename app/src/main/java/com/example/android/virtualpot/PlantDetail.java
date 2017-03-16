@@ -26,10 +26,8 @@ public class PlantDetail extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPlantId = getIntent().getLongExtra("EXTRA_PLANT_ID", 0);
         setContentView(R.layout.activity_plant_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mPlantId = getIntent().getLongExtra("EXTRA_PLANT_ID", 0);
         getSupportLoaderManager().initLoader(1, null, this);
     }
 
