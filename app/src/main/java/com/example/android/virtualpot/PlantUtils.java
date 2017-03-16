@@ -6,8 +6,17 @@ import android.content.res.TypedArray;
 
 public class PlantUtils {
 
-    public static final long MAX_AGE_WITHOUT_WATER = 1000 * 60 * 60 * 48; // 48 hours
-    public static final long DANGER_AGE_WITHOUT_WATER = 1000 * 60 * 60 * 24; // 24 hours
+    private static final long HOUR_MILLISECONDS = 1000 * 60 * 60;
+    private static final long DAY_MILLISECONDS = HOUR_MILLISECONDS * 24;
+
+    public static final long MIN_AGE_BETWEEN_WATER = HOUR_MILLISECONDS * 2; // 2 hours
+    public static final long DANGER_AGE_WITHOUT_WATER = DAY_MILLISECONDS * 1; // 1 day
+    public static final long MAX_AGE_WITHOUT_WATER =  DAY_MILLISECONDS * 2; // 2 days
+    public static final long TINY_AGE = DAY_MILLISECONDS * 4; // 4 days
+    public static final long JUVENILE_AGE = DAY_MILLISECONDS * 8; // 8 days
+    public static final long FULLY_GROWN_AGE = DAY_MILLISECONDS * 16; // 16 days
+
+
     enum PlantStatus {ALIVE, DYING, DEAD};
     enum PlantSize {TINY, JUVENILE, FULLY_GROWN};
 
@@ -25,30 +34,32 @@ public class PlantUtils {
         if(waterAge > MAX_AGE_WITHOUT_WATER) status = PlantStatus.DEAD;
         else if(waterAge > DANGER_AGE_WITHOUT_WATER) status = PlantStatus.DYING;
 
-
-        //plant is still alive! update image if old enough
-        double hours = plantAge / (1000.0 * 60 * 60 );
-        if (hours > 10) {
-            return getPlantImgResName(context,type,status,PlantSize.FULLY_GROWN);
-        } else if (hours > 5) {
-            return getPlantImgResName(context,type,status,PlantSize.JUVENILE);
-        } else if (hours > 1) {
-            return getPlantImgResName(context,type,status,PlantSize.TINY);
+        //Update image if old enough
+        if (plantAge > FULLY_GROWN_AGE) {
+            return getPlantImgRes(context,type,status,PlantSize.FULLY_GROWN);
+        } else if (plantAge > JUVENILE_AGE) {
+            return getPlantImgRes(context,type,status,PlantSize.JUVENILE);
+        } else if (plantAge > TINY_AGE) {
+            return getPlantImgRes(context,type,status,PlantSize.TINY);
         } else {
             return R.drawable.empty_pot;
         }
     }
 
-    public static int getPlantImgResName(Context context, int type, PlantStatus status, PlantSize size){
+    public static int getPlantImgRes(Context context, int type, PlantStatus status, PlantSize size){
         Resources res = context.getResources();
         TypedArray plantTypes = res.obtainTypedArray(R.array.plant_types);
         String resName = plantTypes.getString(type);
-        if(status == PlantStatus.DYING) resName += "_d";
+        if(status == PlantStatus.DYING) resName += "_danger";
         else if(status == PlantStatus.DEAD) resName += "_dead";
         if(size==PlantSize.TINY) resName += "_1";
         else if(size==PlantSize.JUVENILE) resName += "_2";
         else if(size==PlantSize.FULLY_GROWN) resName += "_3";
         return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
+    }
+
+    public static int getEmptyImgeRes() {
+        return R.drawable.grass;
     }
 
     /**

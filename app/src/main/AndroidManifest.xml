@@ -21,11 +21,10 @@
         <provider
             android:name=".provider.PlantContentProvider"
             android:authorities="com.example.android.virtualpot"
-            android:exported="false" />
+            android:exported="true"/>
 
         <service
-            android:name=".PlantWateringService"
-            android:exported="false" />
+            android:name=".PlantWateringService" />
 
         <activity android:name=".MainActivity"
             android:label="@string/title_activity_my_garden">
@@ -40,8 +39,7 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <service android:name="StackWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false" />
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

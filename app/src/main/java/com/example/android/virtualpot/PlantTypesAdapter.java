@@ -19,7 +19,6 @@ package com.example.android.virtualpot;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +58,7 @@ public class PlantTypesAdapter extends RecyclerView.Adapter<PlantTypesAdapter.Pl
 
     @Override
     public void onBindViewHolder(PlantViewHolder holder, int position) {
-        int imgRes = PlantUtils.getPlantImgResName(
+        int imgRes = PlantUtils.getPlantImgRes(
                 mContext,position,
                 PlantUtils.PlantStatus.ALIVE,
                 PlantUtils.PlantSize.FULLY_GROWN);

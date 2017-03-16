@@ -48,11 +48,6 @@ public class MainActivity
         getSupportLoaderManager().initLoader(1, null, this);
     }
 
-
-    public void onAddButtonClicked(View view) {
-
-    }
-
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         Uri PLANT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
@@ -64,7 +59,6 @@ public class MainActivity
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         cursor.moveToFirst();
         mAdapter.swapCursor(cursor);
-        //mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -93,7 +87,8 @@ public class MainActivity
         contentValues.put(PlantEntry.COLUMN_PLANT_TYPE, plantType);
         contentValues.put(PlantEntry.COLUMN_CREATION_TIME, timeNow);
         contentValues.put(PlantEntry.COLUMN_LAST_WATERED_TIME, timeNow);
-        contentValues.put(PlantEntry.COLUMN_IS_DEAD, false);
         getContentResolver().insert(PlantEntry.CONTENT_URI, contentValues);
+
+        PlantWateringService.startActionUpdatePlantWidgets(this);
     }
 }

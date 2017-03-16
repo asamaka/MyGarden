@@ -30,14 +30,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     public StackRemoteViewsFactory(Context applicationContext) {
         mContext = applicationContext;
-        Uri PLANT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
-        mCursor = mContext.getContentResolver().query(
-                PLANT_URI,
-                null,
-                null,
-                null,
-                PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME
-        );
+
     }
 
     @Override
@@ -48,7 +41,15 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     //called when notifyAppWidgetViewDataChanged is called
     @Override
     public void onDataSetChanged() {
-        //TODO: figure out how to force this call and requery data
+        Uri PLANT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLANTS).build();
+        if(mCursor!=null) mCursor.close();
+        mCursor = mContext.getContentResolver().query(
+                PLANT_URI,
+                null,
+                null,
+                null,
+                PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME
+        );
     }
 
     @Override

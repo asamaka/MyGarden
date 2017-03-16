@@ -6,14 +6,10 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
-
-import com.example.android.virtualpot.provider.PlantContract;
 
 /**
  * Implementation of App Widget functionality.
@@ -23,7 +19,7 @@ public class PlantWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         //Start the intent service update action, the service takes care of updating the widgets UI
-        PlantWateringService.startActionUpdatePlant(context);
+        PlantWateringService.startActionUpdatePlantWidgets(context);
 
     }
 
@@ -75,8 +71,7 @@ public class PlantWidget extends AppWidgetProvider {
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.stack_view, appPendingIntent);
 
-        //TODO create empty view
-        //rv.setEmptyView(R.id.stack_view, R.id.empty_view);
+        views.setEmptyView(R.id.stack_view, R.id.empty_view);
 
         return views;
     }
@@ -120,7 +115,7 @@ public class PlantWidget extends AppWidgetProvider {
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
                                           int appWidgetId, Bundle newOptions) {
 
-        PlantWateringService.startActionUpdatePlant(context);
+        PlantWateringService.startActionUpdatePlantWidgets(context);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 

@@ -19,4 +19,5 @@
     <string name="days">days</string>
     <string name="hours">hours</string>
     <string name="minutes">minutes</string>
+    <string name="empty_view_text">No plants yet!</string>
 </resources>

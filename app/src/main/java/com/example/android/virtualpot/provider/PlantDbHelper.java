@@ -42,7 +42,6 @@ public class PlantDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_PLANTS_TABLE = "CREATE TABLE " + PlantEntry.TABLE_NAME + " (" +
                 PlantEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 PlantEntry.COLUMN_PLANT_TYPE + " INTEGER NOT NULL, " +
-                PlantEntry.COLUMN_IS_DEAD + " INTEGER NOT NULL, " +
                 PlantEntry.COLUMN_CREATION_TIME + " TIMESTAMP NOT NULL, " +
                 PlantEntry.COLUMN_LAST_WATERED_TIME + " TIMESTAMP NOT NULL)";
 
