@@ -2,6 +2,7 @@
     <string name="app_name">MyGarden</string>
     <string name="vine">Vine</string>
     <string name="cactus">Cactus</string>
+    <string name="extra">New plant</string>
     <string name="title_activity_plant_detail">PlantDetail</string>
     <string name="title_activity_my_garden">My Garden</string>
     <string name="days">days</string>

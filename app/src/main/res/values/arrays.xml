@@ -11,6 +11,8 @@ TypedArray plantTypes = res.obtainTypedArray(R.array.plant_types);
 String type = plantTypes.getString(0); // this will return "Vine"
 -->
 
+<!-- TODO add instructions to add new plant types -->
+
 <resources>
     <array name="plant_types">
         <item>vine</item>

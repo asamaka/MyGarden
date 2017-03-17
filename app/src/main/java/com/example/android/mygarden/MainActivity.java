@@ -79,8 +79,8 @@ public class MainActivity
     public void onPlantClick(View view) {
         ImageView imgView = (ImageView) view.findViewById(R.id.plant_list_item_image);
         long plantId = (long) imgView.getTag();
-        Intent intent = new Intent(getBaseContext(), PlantDetail.class);
-        intent.putExtra("EXTRA_PLANT_ID", plantId);
+        Intent intent = new Intent(getBaseContext(), PlantDetailActivity.class);
+        intent.putExtra(PlantDetailActivity.EXTRA_PLANT_ID, plantId);
         startActivity(intent);
     }
 

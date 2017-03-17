@@ -33,17 +33,18 @@ import com.example.android.mygarden.provider.PlantContract;
 import static com.example.android.mygarden.provider.PlantContract.BASE_CONTENT_URI;
 import static com.example.android.mygarden.provider.PlantContract.PATH_PLANTS;
 
-public class PlantDetail extends AppCompatActivity
+public class PlantDetailActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int SINGLE_LOADER_ID = 200;
+    public static final String EXTRA_PLANT_ID = "com.example.android.mygarden.extra.PLANT_ID";
     long mPlantId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_detail);
-        mPlantId = getIntent().getLongExtra("EXTRA_PLANT_ID", 0);
+        mPlantId = getIntent().getLongExtra(EXTRA_PLANT_ID, 0);
         // This activity displays single plant information that is loaded using a cursor loader
         getSupportLoaderManager().initLoader(SINGLE_LOADER_ID, null, this);
     }

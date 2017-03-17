@@ -27,6 +27,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.example.android.mygarden.provider.PlantContract;
+
 public class PlantWidget extends AppWidgetProvider {
 
     @Override
@@ -61,7 +63,14 @@ public class PlantWidget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.plant_widget);
 
         // Set the click handler to open the main activity
-        Intent appIntent = new Intent(context, MainActivity.class);
+        Intent appIntent;
+        if (plantId == PlantContract.INVALID_PLANT_ID) {
+            // Set on click to open the main activity since this plant ID is invalid
+            appIntent = new Intent(context, MainActivity.class);
+        } else { // Set on click to open the corresponding detail activity
+            appIntent = new Intent(context, PlantDetailActivity.class);
+            appIntent.putExtra(PlantDetailActivity.EXTRA_PLANT_ID, plantId);
+        }
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.plant_image, appPendingIntent);
 
