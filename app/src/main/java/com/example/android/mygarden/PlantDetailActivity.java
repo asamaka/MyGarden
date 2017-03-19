@@ -79,16 +79,23 @@ public class PlantDetailActivity extends AppCompatActivity
         long timeNow = System.currentTimeMillis();
 
         int plantImgRes = PlantUtils.getPlantImageRes(this, timeNow - createdAt, timeNow - wateredAt, plantType);
-        int waterImgRes = PlantUtils.getWaterImageRes(timeNow - wateredAt);
 
         ((ImageView) findViewById(R.id.plant_detail_image)).setImageResource(plantImgRes);
-        ((ImageView) findViewById(R.id.water_detail_image)).setImageResource(waterImgRes);
+        ((TextView) findViewById(R.id.plant_detail_name)).setText(String.valueOf(mPlantId));
         ((TextView) findViewById(R.id.plant_age_number)).setText(
                 String.valueOf(PlantUtils.getDisplayAgeInt(timeNow - createdAt))
         );
         ((TextView) findViewById(R.id.plant_age_unit)).setText(
                 PlantUtils.getDisplayAgeUnit(this, timeNow - createdAt)
         );
+        ((TextView) findViewById(R.id.last_watered_number)).setText(
+                String.valueOf(PlantUtils.getDisplayAgeInt(timeNow - wateredAt))
+        );
+        ((TextView) findViewById(R.id.last_watered_unit)).setText(
+                PlantUtils.getDisplayAgeUnit(this, timeNow - wateredAt)
+        );
+        int waterPercent = 100-((int)(100*(timeNow - wateredAt)/PlantUtils.MAX_AGE_WITHOUT_WATER));
+        ((WaterLevelView) findViewById(R.id.water_level)).setValue(waterPercent);
     }
 
     @Override

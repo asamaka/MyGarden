@@ -104,7 +104,8 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         // Update the plant image
         int imgRes = PlantUtils.getPlantImageRes(mContext, timeNow - createdAt, timeNow - wateredAt, plantType);
-        views.setImageViewResource(R.id.plant_image, imgRes);
+        views.setImageViewResource(R.id.widget_plant_image, imgRes);
+        views.setTextViewText(R.id.widget_plant_name, String.valueOf(plantId));
         // Always hide the water drop in StackView mode
         views.setViewVisibility(R.id.water_button, View.GONE);
 
@@ -113,7 +114,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         extras.putLong(PlantWateringService.EXTRA_PLANT_ID, plantId);
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
-        views.setOnClickFillInIntent(R.id.plant_image, fillInIntent);
+        views.setOnClickFillInIntent(R.id.widget_plant_image, fillInIntent);
 
         return views;
 

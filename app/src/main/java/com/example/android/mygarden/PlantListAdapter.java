@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.android.mygarden.provider.PlantContract.PlantEntry;
 
@@ -74,6 +75,7 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.Plan
         int imgRes = PlantUtils.getPlantImageRes(mContext, timeNow - createdAt, timeNow - wateredAt, plantType);
 
         holder.plantImageView.setImageResource(imgRes);
+        holder.plantNameView.setText(String.valueOf(plantId));
         holder.plantImageView.setTag(plantId);
     }
 
@@ -105,10 +107,12 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.Plan
     class PlantViewHolder extends RecyclerView.ViewHolder {
 
         ImageView plantImageView;
+        TextView plantNameView;
 
         public PlantViewHolder(View itemView) {
             super(itemView);
             plantImageView = (ImageView) itemView.findViewById(R.id.plant_list_item_image);
+            plantNameView = (TextView) itemView.findViewById(R.id.plant_list_item_name);
         }
 
     }

@@ -72,7 +72,7 @@ public class PlantWidget extends AppWidgetProvider {
             appIntent.putExtra(PlantDetailActivity.EXTRA_PLANT_ID, plantId);
         }
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setOnClickPendingIntent(R.id.plant_image, appPendingIntent);
+        views.setOnClickPendingIntent(R.id.widget_plant_image, appPendingIntent);
 
         // Set the click handler to water the plant
         // Usually you would set the button image tag to the plant ID but since widgets can only deal
@@ -83,7 +83,8 @@ public class PlantWidget extends AppWidgetProvider {
         PendingIntent wateringPendingIntent = PendingIntent.getService(context, 0, waterIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_water_button, wateringPendingIntent);
         //update image
-        views.setImageViewResource(R.id.plant_image, imgRes);
+        views.setImageViewResource(R.id.widget_plant_image, imgRes);
+        views.setTextViewText(R.id.widget_plant_name, String.valueOf(plantId));
         if (showWater) views.setViewVisibility(R.id.widget_water_button, View.VISIBLE);
         else views.setViewVisibility(R.id.widget_water_button, View.INVISIBLE);
         return views;

@@ -1,6 +1,6 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="150dp"
-        android:height="150dp"
+        android:width="100dp"
+        android:height="100dp"
         android:viewportWidth="314.57"
         android:viewportHeight="383.33">
     <path
@@ -11,28 +11,16 @@
         android:fillColor="#f2f2f2"/>
     <path
         android:pathData="M2.62,25.56h307.76v72.21h-307.76z"
-        android:fillColor="#03a9f4"/>
+        android:fillColor="@color/dark_blue"/>
     <path
         android:pathData="m310.38,97.76 l4.17,-5.02 -4.95,-0.89z"
-        android:fillColor="#03a9f4"/>
+        android:fillColor="@color/dark_blue"/>
     <path
         android:pathData="m6.8,20.53 l-4.13,5.05 4.92,0.86z"
-        android:fillColor="#03a9f4"/>
+        android:fillColor="@color/dark_blue"/>
     <path
         android:pathData="M6.81,20.53h307.76v72.21h-307.76z"
-        android:fillColor="#29b6f6"/>
-    <path
-        android:pathData="M58,2.09L83.38,2.09A4.88,4.88 47.88,0 1,88.26 6.96L88.26,57.05A4.88,4.88 71.6,0 1,83.38 61.93L58,61.93A4.88,4.88 77.85,0 1,53.12 57.05L53.12,6.96A4.88,4.88 52.15,0 1,58 2.09z"
-        android:fillColor="#0277bd"/>
-    <path
-        android:pathData="M232.11,2.09L257.49,2.09A4.88,4.88 127.57,0 1,262.37 6.96L262.37,57.05A4.88,4.88 126.12,0 1,257.49 61.93L232.11,61.93A4.88,4.88 121.94,0 1,227.23 57.05L227.23,6.96A4.88,4.88 120.38,0 1,232.11 2.09z"
-        android:fillColor="#0277bd"/>
-    <path
-        android:pathData="M60.1,0L85.48,0A4.88,4.88 0,0 1,90.36 4.88L90.36,54.97A4.88,4.88 0,0 1,85.48 59.85L60.1,59.85A4.88,4.88 0,0 1,55.22 54.97L55.22,4.88A4.88,4.88 0,0 1,60.1 0z"
-        android:fillColor="#0288d1"/>
-    <path
-        android:pathData="M234.2,0L259.58,0A4.88,4.88 0,0 1,264.46 4.88L264.46,54.97A4.88,4.88 0,0 1,259.58 59.85L234.2,59.85A4.88,4.88 0,0 1,229.32 54.97L229.32,4.88A4.88,4.88 0,0 1,234.2 0z"
-        android:fillColor="#0288d1"/>
+        android:fillColor="@color/dark_blue"/>
     <path
         android:pathData="m310.46,311.92 l-34.76,68.75h20.84c7.71,0 13.92,-6.21 13.92,-13.92v-54.83z"
         android:fillColor="#cfd8dc"/>

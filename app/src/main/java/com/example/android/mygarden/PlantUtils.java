@@ -119,31 +119,6 @@ public class PlantUtils {
     }
 
     /**
-     * Returns the corresponding image resource of the water meter given the time since the plant
-     * was last watered
-     *
-     * @param waterAge Time (in milliseconds) since it was last watered
-     * @return Image Resource to the correct water meter image
-     */
-    static int getWaterImageRes(long waterAge) {
-        //plant is still alive! update image if old enough
-        int hours = (int) (waterAge / HOUR_MILLISECONDS);
-        if (hours > 10) {
-            return R.drawable.water_empty;
-        } else if (hours > 4) {
-            return R.drawable.water_1;
-        } else if (hours > 3) {
-            return R.drawable.water_2;
-        } else if (hours > 2) {
-            return R.drawable.water_3;
-        } else if (hours > 1) {
-            return R.drawable.water_4;
-        } else {
-            return R.drawable.water_full;
-        }
-    }
-
-    /**
      * Converts the age in milli seconds to a displayable format (days, hours or minutes)
      *
      * @param milliSeconds The age in milli seconds
@@ -160,7 +135,7 @@ public class PlantUtils {
     /**
      * Converts the age in milli seconds to a displayable format (days, hours or minutes)
      *
-     * @param context The context
+     * @param context      The context
      * @param milliSeconds The age in milli seconds
      * @return The unit of either days, hours or minutes
      */

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <com.example.android.mygarden.WaterLevelView
+        android:id="@+id/water_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:radius="50dp"
+        app:value="100"
+        />
+
+    <TextView
+        android:id="@+id/last_watered_number"
+        app:layout_constraintTop_toTopOf="@+id/water_level"
+        app:layout_constraintBottom_toBottomOf="@+id/water_level"
+        app:layout_constraintLeft_toLeftOf="@+id/water_level"
+        app:layout_constraintRight_toRightOf="@+id/water_level"
+        app:layout_constraintVertical_bias="0.3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        tools:text="17" />
+
+    <TextView
+        android:id="@+id/last_watered_unit"
+        app:layout_constraintTop_toTopOf="@+id/last_watered_number"
+        app:layout_constraintLeft_toLeftOf="@+id/water_level"
+        app:layout_constraintRight_toRightOf="@+id/water_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:textSize="16sp"
+        tools:text="@string/minutes" />
+</android.support.constraint.ConstraintLayout>
